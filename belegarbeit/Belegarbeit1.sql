@@ -12,3 +12,4 @@ WHERE m.mid = nt.Mitglied AND r.rid = nt.reise);
 1c)
 CREATE RULE _insertMitgliederReisen AS ON INSERT TO MitgliederReisen INSTEAD
 (INSERT INTO Mitglieder( 
+sdfhbdasifhdsisudhfdsiuhfiudshfaiudsg Bla und keks
