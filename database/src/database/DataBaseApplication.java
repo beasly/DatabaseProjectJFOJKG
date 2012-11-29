@@ -1,3 +1,5 @@
+package database;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -18,13 +20,13 @@ public class DataBaseApplication extends JFrame{
 		add(new JButton("bla"), BorderLayout.WEST);
 		add(new JButton("bla"), BorderLayout.SOUTH);
 		add(new DataBaseCenterPanel(), BorderLayout.CENTER);
-
 		setSize(800, 800);
 		setVisible(true);
 	}
 
 	public static void main(String[] args){
 		new DataBaseApplication();
+
 	}
 
 }
