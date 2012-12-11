@@ -1,6 +1,8 @@
 package database;
 
+import java.sql.Connection;
 import java.sql.Driver;
+import java.sql.DriverManager;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,17 +12,17 @@ import java.sql.Driver;
  * To change this template use File | Settings | File Templates.
  */
 public class CheckURL {
+	private Connection dbCon;
 
 	public CheckURL() {
 		try {
-			Driver driver = (Driver) Class.forName("symantex.itools.db.jdbc.Driver").newInstance();
-			// "org.postgresql.Driver").newInstance();
-			String dbURL = "jdbc:dbaw://localhost:8888/Uni";
-			if (driver.acceptsURL(dbURL)) {
-				System.out.println("URL is valid");
-			} else {
-				System.out.println("URL is not valid");
+			try{
+				Class.forName("org.postgresql.Driver"); }
+			catch (Exception e) {
+				System.err.println("Driver not found: "+e.toString()); System.exit(0);
 			}
+
+			dbCon = DriverManager.getConnection("localhost:8889","root", "root");
 		} catch (Exception e) {
 			System.err.println("FATAL ERROR: "+e.getMessage());
 		}
