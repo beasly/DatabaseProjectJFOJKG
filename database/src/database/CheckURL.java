@@ -7,7 +7,7 @@ import java.sql.Driver;
  * User: kevingoy
  * Date: 22.11.12
  * Time: 20:55
- * To change this template use File | Settings | File Templates.
+ * To change this template use File | Settings | File Templates. homo
  */
 public class CheckURL{
 
