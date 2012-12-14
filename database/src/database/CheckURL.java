@@ -3,6 +3,7 @@ package database;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.Statement;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,18 +14,15 @@ import java.sql.DriverManager;
  */
 public class CheckURL {
 	private Connection dbCon;
+	private Statement statement;
 
 	public CheckURL() {
 		try {
-			try{
-				Class.forName("org.postgresql.Driver"); }
-			catch (Exception e) {
-				System.err.println("Driver not found: "+e.toString()); System.exit(0);
-			}
-
-			dbCon = DriverManager.getConnection("localhost:8889","root", "root");
+			dbCon = DriverManager.getConnection("jdbc:postgresql://db.f4.htw-berlin.de:5432/_s0538977__buechersammlung","_s0538977__buechersammlung_generic", "database");
+			statement = dbCon.createStatement();
 		} catch (Exception e) {
 			System.err.println("FATAL ERROR: "+e.getMessage());
+			System.exit(0);
 		}
 	}
 

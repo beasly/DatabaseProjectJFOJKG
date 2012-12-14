@@ -14,11 +14,8 @@ public class DataBaseApplication extends JFrame{
     setTitle( "Dbapp" );
     setDefaultCloseOperation( EXIT_ON_CLOSE );
     setLayout( new BorderLayout( 5, 5 ) );
-    add( new JButton( "bla" ), BorderLayout.NORTH );
-    add( new JButton( "pups" ), BorderLayout.EAST );
-    add( new JButton( "bla" ), BorderLayout.WEST );
-    add( new JButton( "bla" ), BorderLayout.SOUTH );
-    add( new DataBaseCenterPanel(), BorderLayout.CENTER );
+		add( new JPanel(), BorderLayout.NORTH);
+    add( new JTextArea(), BorderLayout.CENTER );
     setSize( 800, 800 );
     setVisible( true );
   }
