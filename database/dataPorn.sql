@@ -30,32 +30,32 @@ Genre varchar(20),
 Hauptcharakter varchar(20));
 
 CREATE TABLE veroeffentlichtVon(
-Buch integer references Buch(ISBN) on delete cascade,
+Buch varchar(17) references Buch(ISBN) on delete cascade,
 Verlag integer references Verlag(VerlagsID) on delete cascade,
 Datum Date,
 primary key(Buch, Verlag));
 
 CREATE TABLE ausgeliehenAn(
-Buch integer references Buch(ISBN) on delete cascade,
+Buch varchar(17) references Buch(ISBN) on delete cascade,
 Ausleiher integer references Ausleiher(AusleiherID) on delete cascade,
 Leihdatum Date not null,
 Rueckgabedatum Date,
 primary key(Buch, Ausleiher));
 
 CREATE TABLE geschriebenVon(
-Buch integer references Buch(ISBN) on delete cascade,
+Buch varchar(17) references Buch(ISBN) on delete cascade,
 Autoren integer references Autoren(AutorenID) on delete cascade,
 Vorname varchar(20),
 Name varchar(20),
 primary key(Buch, Autoren));
 
 CREATE TABLE liegtIn(
-Buch integer references Buch(ISBN) on delete cascade,
+Buch varchar(17) references Buch(ISBN) on delete cascade,
 Regal integer references Regal(RegalID) on delete cascade,
 Fach integer,
 primary key(Buch, Regal)); 
 
 CREATE TABLE hat(
-Buch integer references Buch(ISBN) on delete cascade,
+Buch varchar(17) references Buch(ISBN) on delete cascade,
 Schlagwort integer references Schlagwort(SchlagwortID) on delete cascade,
 primary key(Buch, Schlagwort));
