@@ -1,0 +1,6 @@
+Notizen zur Datenbank
+
+- 	Trigger wenn Ausleiher Buch zurückbringt,
+	dann Rückgabedatum eintragen, dann delete aus
+	ausgeliehen aus und dann evtl. eintragen des 
+	Standorts in liegtin über Java Application
