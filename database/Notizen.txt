@@ -1,6 +1,123 @@
-Notizen zur Datenbank
+Notizen zur Datenbank:
 
-- 	Trigger wenn Ausleiher Buch zurückbringt,
-	dann Rückgabedatum eintragen, dann delete aus
-	ausgeliehen aus und dann evtl. eintragen des 
-	Standorts in liegtin über Java Application
+Anforderungen:
+
+	Anforderungen an das Programm:
+
+		-Bücher mit Parametern eintragen (Author, Jahr, etc.)
+		-Ausleiher eintragen
+		-Ausgabe ausgeliehene Bücher
+		-verschiedene Ausgaben (nach Regal, Bücher, Author)
+	
+	Anforderungen an die Datenbank:
+
+		-zwei Regeln
+		-zwei Trigger
+		-Datenbankskript, das einem potentiellen Systemadministrator die Verwaltung Ihrer Datenbank erleichtert.
+		-Funktion enthält eine Schleife auf Basis eine Cursors oder Iterators
+		-Transaktionen: Ausleiher muss erst eingetragen sein, bevor man 
+
+
+Implementierung:
+
+	Tabs:
+
+		Standardansicht:
+			
+			 -Ausgabe der Relationen 
+			 
+			 -Rechtsklick auf Buch "Ausleihen" -> Popup (Dropdown mit Ausleiher, Datum mit Textfeld (default heutiger Tag),
+																			Button "Verleihen");
+																			
+			 -Rechtsklick auf Buch "Zurückgeben" -> Popup (TItel, Ausleiher, Rückgabedatum eintragen (default heutiger Tag,
+																					Button "Zurückgeben");
+																					
+			 -Optional Filter: (ausgeliehene Bücher (checkbox), verlag (dropdown), author (dropdown), regal(dropdown), genre (dropdown),
+			 										schlagwörter (dropdown))
+			 
+			 -Standardansicht (Buch, Autor, Titel, Verlag, Genre, Schlagwort, regal)
+			 
+			 -Ausgeliehene Bücher-Button: Popup mit Attributen wie Ausleiher, Datum der Ausleihe, Autor, Titel)
+	
+			 -optional Info-Popup
+	
+		
+		Buch :
+
+			-Titel (Textfeld)
+			-Preis (Textfeld)
+			-ISBN (Textfeld) // ISBN13 
+			-Genre (Dropdown (neuer Reiter: Einfügen // Popup))
+	
+			-Autor (JComboBox) - Exception, falls Autor noch nicht da (Zusätzlich: Autor einfügen)
+	
+			-Verlag (Dropdown (neuer Reiter: Einfügen // Popup))
+			-Datum (kann Null sein)
+
+			-Regal (Dropdown (neuer Reiter: Einfügen // Popup))
+	
+			-Schlagwörter (Dropdown (neuer Reiter: Einfügen // Popup))
+			
+			-Ansicht in der Tabelle: alle Attribute aus der Metabox werden angezeigt
+			
+	
+	
+		Neuen Author 
+		
+			-Vorname
+			
+			-Nachname
+			
+			-Ansicht in der Tabelle: alle Attribute aus der Metabox werden angezeigt
+
+		Neuer Verlag 
+		
+			-Ort:
+			
+			-Name:
+
+			-Ansicht in der Tabelle: alle Attribute aus der Metabox werden angezeigt
+			
+		Neuen Ausleiher 
+		
+			-
+			
+			-Ansicht in der Tabelle: alle Attribute aus der Metabox werden angezeigt
+			
+		Neues Regal:
+			
+			-Ansicht in der Tabelle: alle Attribute aus der Metabox werden angezeigt
+
+		Neues Schlagwort:
+		
+			-Ansicht in der Tabelle: alle Attribute aus der Metabox werden angezeigt
+
+		Neues Genre:
+			
+			-Ansicht in der Tabelle: alle Attribute aus der Metabox werden angezeigt
+	
+	Buchverleih:
+	
+		-Popup
+	
+
+
+Noch zu tun:
+	
+	Änderung an der Datenbank:
+	
+		- 2 Tabellen: 1. hatSchlagwort 2. Schlagwort (SchlagwortId/ Schlagwort)
+		- 2 Tabellen: 1. hatGenre 2. Genre (GenreId/ Genre)
+		- Hauptcharakter entfernen aus Schlagwort entfernen
+		
+		- ID´s in serials umwandeln
+
+	Implementierung von Regel:
+	
+		- Regel wenn Ausleiher Buch zurückbringt,
+			dann Rückgabedatum eintragen, dann flag in ausgeliehen_an setzen 
+			(somit wird es in der tabelle unsichtbar)
+			ausgeliehen aus und dann evtl. eintragen des 
+			Standorts in liegtin über Java Application
+			
+		
