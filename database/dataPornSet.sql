@@ -52,7 +52,7 @@ INSERT INTO hat VALUES ('978-0596006976', 1);
 INSERT INTO hat VALUES ('978-3827418241', 3);
 INSERT INTO hat VALUES ('978-3423214124', 2);
 
-INSERT INTO Ausleiher VALUES (1, 'Julianus', 'Finkus', 'jufikus@hotmail.sz');
+INSERT INTO Ausleiher VALUES (1, 'Julianus muhammad', 'Finkus', 'jufikus@hamas.ir');
 INSERT INTO Ausleiher VALUES (2, 'Ozzy', 'Ozkerus', 'ozky@hotmail.sz');
 
 INSERT INTO ausgeliehenan VALUES ('978-3423214124',2, '04/08/12');
