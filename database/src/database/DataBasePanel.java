@@ -1,3 +1,5 @@
+package database;
+
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -25,12 +27,12 @@ public DataBasePanel() {
     OverviewFilter tableFilter = new OverviewFilter();
     
     
-    ImageIcon icon1 = createImageIcon("/images/magnifier.jpg");
-    ImageIcon icon2 = createImageIcon("/images/books.png");
-    ImageIcon icon3 = createImageIcon("/images/author.jpg");
-    ImageIcon icon4 = createImageIcon("/images/publisher.png");
-    ImageIcon icon5 = createImageIcon("/images/borrower.gif");
-    ImageIcon icon6 = createImageIcon("/images/shelf.jpg");
+    ImageIcon icon1 = createImageIcon("./images/magnifier.jpg");
+    ImageIcon icon2 = createImageIcon("./images/books.png");
+    ImageIcon icon3 = createImageIcon("./images/author.jpg");
+    ImageIcon icon4 = createImageIcon("./images/publisher.png");
+    ImageIcon icon5 = createImageIcon("./images/borrower.gif");
+    ImageIcon icon6 = createImageIcon("./images/shelf.jpg");
     
 
 

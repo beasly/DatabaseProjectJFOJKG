@@ -1,4 +1,4 @@
-/*
+package database;/*
  * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,9 +40,9 @@ import javax.swing.event.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
-import components.SpringUtilities;
 
 import java.awt.Dimension;
+
 
 
 public class OverviewFilter extends JPanel {
