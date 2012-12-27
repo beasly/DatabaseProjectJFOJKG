@@ -1,33 +1,36 @@
+
 CREATE TABLE Buch(
 ISBN varchar(14) not null primary key,
 Preis float(2),
 Titel varchar(40) not null);
 
 CREATE TABLE Ausleiher(
-AusleiherID integer primary key not null,
+AusleiherID serial primary key,
 Vorname varchar(20),
 Name varchar(20),
 Email varchar(30));
 
 CREATE TABLE Verlag(
-VerlagsID integer primary key not null,
+VerlagsID serial primary key,
 Name varchar(30) not null,
 Ort varchar(15));
 
 CREATE TABLE Regal(
-RegalID integer primary key not null,
+RegalID serial primary key,
 Ort varchar(30) not null);
 
 CREATE TABLE Autoren(
-AutorenID integer primary key not null,
+AutorenID serial primary key,
 Vorname varchar(20),
 Name varchar(20) not null);
 
 CREATE TABLE Schlagwort(
-SchlagwortID integer primary key not null,
-Schlagwort varchar(20) not null,
-Genre varchar(20),
-Hauptcharakter varchar(30));
+SchlagwortID serial primary key,
+Schlagwort varchar(20) not null);
+
+CREATE TABLE Genre(
+GenreID serial primary key,
+Genre varchar(20) not null);
 
 CREATE TABLE veroeffentlichtVon(
 Buch varchar(14) references Buch(ISBN) on delete cascade,
@@ -52,7 +55,12 @@ Buch varchar(14) references Buch(ISBN) on delete cascade,
 Regal integer references Regal(RegalID) on delete cascade,
 primary key(Buch, Regal)); 
 
-CREATE TABLE hat(
+CREATE TABLE hatSchlagwort(
 Buch varchar(14) references Buch(ISBN) on delete cascade,
 Schlagwort integer references Schlagwort(SchlagwortID) on delete cascade,
 primary key(Buch, Schlagwort));
+
+CREATE TABLE hatGenre(
+Buch varchar(14) references Buch(ISBN) on delete cascade,
+Genre integer references Genre(GenreID) on delete cascade,
+primary key(Buch, Genre));
