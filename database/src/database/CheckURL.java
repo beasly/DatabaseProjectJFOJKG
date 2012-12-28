@@ -26,7 +26,8 @@ public class CheckURL {
 
 	public CheckURL() {
 		try {
-			dbCon = DriverManager.getConnection("jdbc:postgresql://db.f4.htw-berlin.de:5432/_s0538977__buechersammlung","_s0538977__buechersammlung_generic", "database");
+			dbCon = DriverManager.getConnection("jdbc:postgresql://db.f4.htw-berlin.de:5432/_s0538977__buechersammlung", "s0538977", "wHFAejd5");
+							//"_s0538977__buechersammlung_generic", "database");
 			statement = dbCon.createStatement();
 		} catch (Exception e) {
 			System.err.println("FATAL ERROR: "+e.getMessage());
@@ -45,8 +46,8 @@ public class CheckURL {
    public ResultSet executeSelect(String sql)
   {
     try {
-      Statement stm = dbCon.cre   ateStatement();
-      result = statement.executeQuery(sql);
+      Statement stm = dbCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+      result = stm.executeQuery(sql);
     }
     catch(SQLException e) {
       e.printStackTrace();
@@ -75,6 +76,8 @@ public class CheckURL {
     }
     return result;
   }
+
+
 
 
 }

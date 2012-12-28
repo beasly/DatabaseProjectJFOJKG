@@ -106,11 +106,6 @@ Noch zu tun:
 	
 	Änderung an der Datenbank:
 	
-		- 2 Tabellen: 1. hatSchlagwort 2. Schlagwort (SchlagwortId/ Schlagwort)
-		- 2 Tabellen: 1. hatGenre 2. Genre (GenreId/ Genre)
-		- Hauptcharakter entfernen aus Schlagwort entfernen
-		
-		- ID´s in serials umwandeln
 
 	Implementierung von Regel:
 	
