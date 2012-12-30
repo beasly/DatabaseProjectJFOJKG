@@ -3,7 +3,6 @@ package database;
 import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -23,17 +22,15 @@ public class BookPanel extends JPanel {
 	private JTable bookTable;
 
 	//not all depends on the metabox.. for the first try, i just implemented all book attributes
-	private String[] bookTableHeader = new String[]{
-					"ISBN", "Titel", "Preis"
-	};
+	private String[] bookTableHeader = new String[]{"ISBN", "Titel", "Preis"};
 
-	public BookPanel(){
+	public BookPanel() {
 		//get Connection to the database
 		CheckURL db = new CheckURL();
-		setLayout(new GridLayout(2,1));
+		setLayout(new GridLayout(2, 1));
 		//adds Metabox
 		JPanel metaBox = new JPanel();
-	  //generate components
+		//generate components
 		JLabel titleLabel = new JLabel("Titel");
 		JTextField titleTextField = new JTextField();
 		JLabel priceLabel = new JLabel("Preis");
@@ -41,23 +38,40 @@ public class BookPanel extends JPanel {
 		JLabel isbnLabel = new JLabel("ISBN");
 		JTextField isbnTextField = new JTextField();
 		JLabel genreLabel = new JLabel("Genre");
-		JComboBox genre = new JComboBox();
+		//fill genre combobox
+		ResultSet genreResultSet = db.executeSelect("Select Genre from Genre;");
+		String[] genreArray = db.resultSetToStringArray(genreResultSet, 1);
+		JComboBox genre = new JComboBox(genreArray);
+
 		JLabel authorLabel = new JLabel("Autor");
-		JComboBox author = new JComboBox();
+		ResultSet authorResultSet = db.executeSelect("Select Name from Autoren;");
+		String[] authorArray = db.resultSetToStringArray(authorResultSet, 1);
+
+		JComboBox author = new JComboBox(authorArray);
 		JLabel publisherLabel = new JLabel("Verlag");
-		JComboBox publisher = new JComboBox();
+		ResultSet publisherResultSet = db.executeSelect("Select Name from Verlag;");
+		String[] publisherArray = db.resultSetToStringArray(publisherResultSet, 1);
+
+		JComboBox publisher = new JComboBox(publisherArray);
 		JLabel shelfLabel = new JLabel("Regal");
-		JComboBox shelf = new JComboBox();
+		ResultSet shelfResultSet = db.executeSelect("Select Ort from Regal;");
+		String[] shelfArray = db.resultSetToStringArray(shelfResultSet, 1);
+
+		JComboBox shelf = new JComboBox(shelfArray);
 		JLabel dateLabel = new JLabel("Datum");
-		Date date	 = GregorianCalendar.getInstance(Locale.GERMANY).getTime();
+		Date date = GregorianCalendar.getInstance(Locale.GERMANY).getTime();
 		SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
 		JTextField dateTextField = new JTextField(formater.format(date));
 		JLabel wordLabel = new JLabel("Schlagwort");
-		JComboBox word = new JComboBox();
+		ResultSet wordResultSet = db.executeSelect("Select Schlagwort from Schlagwort;");
+		String[] wordArray = db.resultSetToStringArray(wordResultSet, 1);
+
+		JComboBox word = new JComboBox(wordArray);
+		JButton okButton = new JButton("OK");
 
 
 		//layouting    and adding components
-		metaBox.setLayout(new GridLayout(0,2));
+		metaBox.setLayout(new GridLayout(0, 2));
 
 		metaBox.add(titleLabel);
 		metaBox.add(titleTextField);
@@ -85,6 +99,9 @@ public class BookPanel extends JPanel {
 
 		metaBox.add(wordLabel);
 		metaBox.add(word);
+		//empty label becaus of ugly layout
+		metaBox.add(new Label(""));
+		metaBox.add(okButton);
 
 		add(metaBox);
 
@@ -99,16 +116,11 @@ public class BookPanel extends JPanel {
 	}
 
 
-
-	public String[][] getTableContent(ResultSet bookResult, int columnLength){
+	public String[][] getTableContent(ResultSet bookResult, int columnLength) {
 		String[][] tableContent = null;
 		try {
 			//getrowCount
-			int rowCount = 0;
-			while (bookResult.next()) {
-				rowCount++;
-			}
-			bookResult.beforeFirst();
+			int rowCount = getRowCount(bookResult);
 			//set tablecontent
 			tableContent = new String[rowCount][columnLength];
 			int rowIndex = 0;
@@ -124,6 +136,15 @@ public class BookPanel extends JPanel {
 		}
 		return tableContent;
 
+	}
+
+	private int getRowCount(ResultSet bookResult) throws SQLException {
+		int rowCount = 0;
+		while (bookResult.next()) {
+			rowCount++;
+		}
+		bookResult.beforeFirst();
+		return rowCount;
 	}
 
 }

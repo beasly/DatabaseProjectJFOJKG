@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.*;
+import java.util.LinkedList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -76,6 +77,20 @@ public class CheckURL {
     }
     return result;
   }
+
+	public String[] resultSetToStringArray(ResultSet resultSet, int columnIndex) {
+		LinkedList<String> resultList = new LinkedList<String>();
+
+		try {
+			while (resultSet.next()) {
+				resultList.add(resultSet.getString(columnIndex));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return resultList.toArray(new String[0]);
+	}
 
 
 
