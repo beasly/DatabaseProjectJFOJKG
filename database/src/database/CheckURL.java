@@ -27,8 +27,7 @@ public class CheckURL {
 
 	public CheckURL() {
 		try {
-			dbCon = DriverManager.getConnection("jdbc:postgresql://db.f4.htw-berlin.de:5432/_s0538977__buechersammlung", "s0538977", "wHFAejd5");
-							//"_s0538977__buechersammlung_generic", "database");
+			dbCon = DriverManager.getConnection("jdbc:postgresql://db.f4.htw-berlin.de:5432/_s0538977__buechersammlung", "_s0538977__buechersammlung_generic", "database");
 			statement = dbCon.createStatement();
 		} catch (Exception e) {
 			System.err.println("FATAL ERROR: "+e.getMessage());
