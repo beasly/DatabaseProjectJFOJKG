@@ -1,14 +1,19 @@
 package database;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.swing.*;
+
+import com.toedter.calendar.JDateChooser;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,98 +27,143 @@ public class BookPanel extends JPanel {
 	private JTable bookTable;
 
 	//not all depends on the metabox.. for the first try, i just implemented all book attributes
-	private String[] bookTableHeader = new String[]{"ISBN", "Titel", "Preis"};
+	private String[] bookTableHeader = new String[]{"ISBN", "Preis", "Titel"};
 
-	public BookPanel() {
-		//get Connection to the database
-		CheckURL db = new CheckURL();
+	public BookPanel(CheckURL db) {
 		setLayout(new GridLayout(2, 1));
 		//adds Metabox
 		JPanel metaBox = new JPanel();
 		//generate components
 		JLabel titleLabel = new JLabel("Titel");
-		JTextField titleTextField = new JTextField();
+		final JTextField titleTextField = new JTextField();
 		JLabel priceLabel = new JLabel("Preis");
-		JTextField priceTextField = new JTextField();
+		final JTextField priceTextField = new JTextField();
 		JLabel isbnLabel = new JLabel("ISBN");
-		JTextField isbnTextField = new JTextField();
+		final JTextField isbnTextField = new JTextField();
 		JLabel genreLabel = new JLabel("Genre");
 		//fill genre combobox
 		ResultSet genreResultSet = db.executeSelect("Select Genre from Genre;");
 		String[] genreArray = db.resultSetToStringArray(genreResultSet, 1);
-		JComboBox genre = new JComboBox(genreArray);
+		final JComboBox genreBox = new JComboBox(genreArray);
 
 		JLabel authorLabel = new JLabel("Autor");
 		ResultSet authorResultSet = db.executeSelect("Select Name from Autoren;");
 		String[] authorArray = db.resultSetToStringArray(authorResultSet, 1);
 
-		JComboBox author = new JComboBox(authorArray);
+		final JComboBox authorBox = new JComboBox(authorArray);
 		JLabel publisherLabel = new JLabel("Verlag");
 		ResultSet publisherResultSet = db.executeSelect("Select Name from Verlag;");
 		String[] publisherArray = db.resultSetToStringArray(publisherResultSet, 1);
 
-		JComboBox publisher = new JComboBox(publisherArray);
+		final JComboBox publisherBox = new JComboBox(publisherArray);
 		JLabel shelfLabel = new JLabel("Regal");
 		ResultSet shelfResultSet = db.executeSelect("Select Ort from Regal;");
 		String[] shelfArray = db.resultSetToStringArray(shelfResultSet, 1);
 
-		JComboBox shelf = new JComboBox(shelfArray);
+		final JComboBox shelfBox = new JComboBox(shelfArray);
 		JLabel dateLabel = new JLabel("Datum");
 		Date date = GregorianCalendar.getInstance(Locale.GERMANY).getTime();
-		SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-		JTextField dateTextField = new JTextField(formater.format(date));
+		final JDateChooser jDateChooser = new JDateChooser();
+		jDateChooser.setDateFormatString("dd/MM/yyyy");
+		jDateChooser.setDate(date);
+		((JTextField)jDateChooser.getDateEditor()).setEditable(false);
+
+
 		JLabel wordLabel = new JLabel("Schlagwort");
 		ResultSet wordResultSet = db.executeSelect("Select Schlagwort from Schlagwort;");
 		String[] wordArray = db.resultSetToStringArray(wordResultSet, 1);
 
-		JComboBox word = new JComboBox(wordArray);
+		final JComboBox wordBox = new JComboBox(wordArray);
 		JButton okButton = new JButton("OK");
+		okButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				String title = titleTextField.getText();
+			  //ISBN ueber die regulaeren Ausdruck pruefen---> Jufi Methode
+				String isbn = isbnTextField.getText();
+				if (title.equals("") || isbn.equals("")) {
+					JOptionPane jOptionPane = new JOptionPane();
+					JOptionPane.showMessageDialog(jOptionPane, "Sie haben keinen Titel oder keine ISBN eingetragen.", "Buchtitel", JOptionPane.ERROR_MESSAGE);
+				} else {
+					if (priceTextField.getText().equals(null)) {
+						Double price = Double.parseDouble(priceTextField.getText());
+					} else {
+						Double price = null;
+					}
+					String genre = (String) genreBox.getSelectedItem();
+					String author = (String) authorBox.getSelectedItem();
+					String publisher = (String) publisherBox.getSelectedItem();
+					String shelf = (String) shelfBox.getSelectedItem();
 
+					Date date = jDateChooser.getDate();
+					String word = (String) wordBox.getSelectedItem();
 
-		//layouting    and adding components
-		metaBox.setLayout(new GridLayout(0, 2));
+					//INSERT IN TABLES
+			}
 
-		metaBox.add(titleLabel);
-		metaBox.add(titleTextField);
-
-		metaBox.add(priceLabel);
-		metaBox.add(priceTextField);
-
-		metaBox.add(isbnLabel);
-		metaBox.add(isbnTextField);
-
-		metaBox.add(genreLabel);
-		metaBox.add(genre);
-
-		metaBox.add(authorLabel);
-		metaBox.add(author);
-
-		metaBox.add(publisherLabel);
-		metaBox.add(publisher);
-
-		metaBox.add(shelfLabel);
-		metaBox.add(shelf);
-
-		metaBox.add(dateLabel);
-		metaBox.add(dateTextField);
-
-		metaBox.add(wordLabel);
-		metaBox.add(word);
-		//empty label becaus of ugly layout
-		metaBox.add(new Label(""));
-		metaBox.add(okButton);
-
-		add(metaBox);
-
-		//then get the resultset for the table
-		ResultSet bookResult = db.executeSelect("Select * from Buch;");
-		bookTable = new JTable(getTableContent(bookResult, bookTableHeader.length), bookTableHeader);
-
-
-		JScrollPane scrollPane = new JScrollPane(bookTable);
-		add(scrollPane);
-
+		}
 	}
+
+	);
+
+
+	//layouting    and adding components
+	metaBox.setLayout(new
+
+	GridLayout(0,2)
+
+	);
+
+	metaBox.add(titleLabel);
+	metaBox.add(titleTextField);
+
+	metaBox.add(priceLabel);
+	metaBox.add(priceTextField);
+
+	metaBox.add(isbnLabel);
+	metaBox.add(isbnTextField);
+
+	metaBox.add(genreLabel);
+	metaBox.add(genreBox);
+
+	metaBox.add(authorLabel);
+	metaBox.add(authorBox);
+
+	metaBox.add(publisherLabel);
+	metaBox.add(publisherBox);
+
+	metaBox.add(shelfLabel);
+	metaBox.add(shelfBox);
+
+	metaBox.add(dateLabel);
+	metaBox.add(jDateChooser);
+
+	metaBox.add(wordLabel);
+	metaBox.add(wordBox);
+	//empty label becaus of ugly layout
+	metaBox.add(new
+
+	Label("")
+
+	);
+	metaBox.add(okButton);
+
+	add(metaBox);
+
+	//then get the resultset for the table
+	ResultSet bookResult = db.executeSelect("Select * from Buch;");
+	bookTable=new
+
+	JTable(getTableContent(bookResult, bookTableHeader.length),bookTableHeader
+
+	);
+
+
+	JScrollPane scrollPane = new JScrollPane(bookTable);
+
+	add(scrollPane);
+
+}
 
 
 	public String[][] getTableContent(ResultSet bookResult, int columnLength) {

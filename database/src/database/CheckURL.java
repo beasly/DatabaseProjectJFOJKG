@@ -36,6 +36,15 @@ public class CheckURL {
 
   }
 
+	public void close_database() {
+		try {
+			dbCon.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("Database closed");
+	}
+
   /**
    * To execute a select query.
    *

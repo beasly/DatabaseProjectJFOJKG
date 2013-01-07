@@ -8,18 +8,18 @@ import javax.swing.*;
 
 public class DataBaseApplicationPanel extends JPanel {
 
-	public DataBaseApplicationPanel() {
- 		initComponents();
+	public DataBaseApplicationPanel(CheckURL db) {
+ 		initComponents(db);
 	}
 
-	public void initComponents() {
+	public void initComponents(CheckURL db) {
 		JTabbedPane jTabbedPane = new JTabbedPane();
 
 		setLayout(new BorderLayout());
 
-		jTabbedPane.addTab("Home", new HomePanel());
+		jTabbedPane.addTab("Home", new HomePanel(db));
 
-		jTabbedPane.addTab("Buch", new BookPanel());
+		jTabbedPane.addTab("Buch", new BookPanel(db));
 		add(jTabbedPane);
 	}
 

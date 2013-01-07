@@ -12,8 +12,7 @@ public class HomePanel extends JPanel{
 	private String[] homeTableHeader = new String[]{"Buch", "Autor" , "Verlag","Genre", "Schlagwort", "Regal"};
 
 
-	public HomePanel(){
-		CheckURL db = new CheckURL();
+	public HomePanel(CheckURL db){
 //metabox evtl. but first gridlayout with one component
 		setLayout(new GridLayout(1,1));
 
