@@ -18,7 +18,7 @@ public class FindeAlleCoolenTypenMain {
 	public static void main(String[] args) {
 		CheckURL db = new CheckURL();
 		int input = 0;
-		while (input != 5) {
+		while (input != 6) {
 			//just to not interrupt the menu with the stacktrace, because printing stacktrace has a little delay
 			try {
 				Thread.sleep(100);
@@ -29,9 +29,10 @@ public class FindeAlleCoolenTypenMain {
 			System.out.println("2. Ausgabe von Freundschaftsbeziehungen");
 			System.out.println("3. Eingabe neuer Freunde");
 			System.out.println("4. Loeschen von Freunden");
-			System.out.println("5. Beenden des Programmes");
+      System.out.println("5. Aendern von Freunden");
+			System.out.println("6. Beenden des Programmes");
 			System.out.print("Auswahl: ");
-			input = Input.intInput(1, 5);
+			input = Input.intInput(1, 6);
 			switch (input) {
 				case 1:
 					getFriendTable(db);
@@ -45,6 +46,9 @@ public class FindeAlleCoolenTypenMain {
 				case 4:
 					deleteFriend(db);
 					break;
+        case 5:
+          setFriendtable(db);
+          break;
 				default:
 					break;
 			}
@@ -113,4 +117,114 @@ public class FindeAlleCoolenTypenMain {
 			e.printStackTrace();
 		}
 	}
+
+  private static void setFriendtable(CheckURL db)
+  {
+    ResultSet friendTable = db.executeSelect("Select * from Freunde;");
+    Input input = new Input();
+    int rows = 0;
+    int index = 0;
+    int freundid = 0;
+    String email = "";
+    String name = "";
+    int alter = 0;
+    String beschreibung = "";
+    int gehalt = 0;
+    boolean check = false;
+    System.out.println("Treffen Sie eine Wahl!");
+    System.out.println("u - Aendern des Datensatzes");
+    System.out.println("n - Naechster Datensatz");
+    System.out.println("v - Voriger Datensatz");
+    System.out.println("q - Beenden der Funktion");
+    char menue = ' ';
+    try {
+      while (friendTable.next()) {
+        rows++;
+      }
+      friendTable.absolute(1);
+      System.out.printf("%-10d%-30s%-30s%-10s%-40s%-10s\n", friendTable.getInt("freundid"), friendTable.getString("email"), friendTable.getString("name"), friendTable.getInt("Alter"), friendTable.getString("beschreibung"), friendTable.getInt("gehalt"));
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    try {
+    while (menue != 'q') {
+      menue = input.charInput();
+      if (menue == 'u' || menue == 'n' || menue == 'v'|| menue == 'q')
+      {
+
+        switch (menue)
+        {
+        case 'u':
+          System.out.println("Gebe die Email ein!");
+          email = Input.stringInput();
+          if (!email.equals(""))
+            friendTable.updateString("email", email);
+
+          System.out.println("Gebe den Namen ein!");
+          name = Input.stringInput();
+          if (!name.equals(""))
+            friendTable.updateString("name", name);
+
+          System.out.println("Gebe das Alter ein!");
+          alter = Input.stringToInt();
+          if (alter != 0)
+            friendTable.updateInt("Alter", alter);
+
+          System.out.println("Gebe die Beschreibung ein!");
+          beschreibung = Input.stringInput();
+          if (!beschreibung.equals(""))
+            friendTable.updateString("beschreibung", beschreibung);
+
+          System.out.println("Gebe das Gehalt ein!");
+          gehalt = Input.stringToInt();
+          if (gehalt != 0)
+            friendTable.updateInt("gehalt", gehalt);
+
+          friendTable.updateRow();
+
+          System.out.printf("%-10d%-30s%-30s%-10s%-40s%-10s\n", friendTable.getInt("freundid"), friendTable.getString("email"), friendTable.getString("name"), friendTable.getInt("Alter"), friendTable.getString("beschreibung"), friendTable.getInt("gehalt"));
+
+          break;
+        case 'n':
+          if (index < rows - 1) {
+          friendTable.next();
+          index++;
+          }
+          else {
+          friendTable.beforeFirst();
+          friendTable.next();
+          index = 0;
+          }
+          System.out.printf("%-10d%-30s%-30s%-10s%-40s%-10s\n", friendTable.getInt("freundid"), friendTable.getString("email"), friendTable.getString("name"), friendTable.getInt("Alter"), friendTable.getString("beschreibung"), friendTable.getInt("gehalt"));
+          break;
+        case 'v':
+          if (index != 0) {
+          friendTable.absolute(index);
+          index--;
+          }
+          else {
+          friendTable.absolute(rows);
+          index = rows - 1;
+          }
+          System.out.printf("%-10d%-30s%-30s%-10s%-40s%-10s\n", friendTable.getInt("freundid"), friendTable.getString("email"), friendTable.getString("name"), friendTable.getInt("Alter"), friendTable.getString("beschreibung"), friendTable.getInt("gehalt"));
+          break;
+        default:
+          break;
+        }
+
+      }
+      else
+        System.out.println("Bitte geben Sie einen gueltigen Buchstaben ein!");
+
+
+
+    }
+  }
+
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 }
