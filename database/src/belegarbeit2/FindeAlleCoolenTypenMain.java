@@ -157,6 +157,7 @@ public class FindeAlleCoolenTypenMain {
         switch (menue)
         {
         case 'u':
+          db.disableAutoCommit();
           System.out.println("Gebe die Email ein!");
           email = Input.stringInput();
           if (!email.equals(""))
@@ -183,7 +184,8 @@ public class FindeAlleCoolenTypenMain {
             friendTable.updateInt("gehalt", gehalt);
 
           friendTable.updateRow();
-
+          db.commitTransaction();
+          db.enableAutoCommit();
           System.out.printf("%-10d%-30s%-30s%-10s%-40s%-10s\n", friendTable.getInt("freundid"), friendTable.getString("email"), friendTable.getString("name"), friendTable.getInt("Alter"), friendTable.getString("beschreibung"), friendTable.getInt("gehalt"));
 
           break;
