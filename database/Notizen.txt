@@ -35,7 +35,7 @@ Implementierung:
 			 -Optional Filter: (ausgeliehene Bücher (checkbox), verlag (dropdown), author (dropdown), regal(dropdown), genre (dropdown),
 			 										schlagwörter (dropdown))
 			 
-			 -Standardansicht (Buch, Autor, Titel, Verlag, Genre, Schlagwort, regal)
+			 -Standardansicht (Buch, Autor, Titel, Verlag, Genre, Schlagwort, regal, Ausleiher)
 			 
 			 -Ausgeliehene Bücher-Button: Popup mit Attributen wie Ausleiher, Datum der Ausleihe, Autor, Titel)
 	

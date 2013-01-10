@@ -3,10 +3,10 @@ package database;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -29,7 +29,7 @@ public class BookPanel extends JPanel {
 	//not all depends on the metabox.. for the first try, i just implemented all book attributes
 	private String[] bookTableHeader = new String[]{"ISBN", "Preis", "Titel"};
 
-	public BookPanel(CheckURL db) {
+	public BookPanel(final CheckURL db) {
 		setLayout(new GridLayout(2, 1));
 		//adds Metabox
 		JPanel metaBox = new JPanel();
@@ -108,11 +108,7 @@ public class BookPanel extends JPanel {
 
 
 	//layouting    and adding components
-	metaBox.setLayout(new
-
-	GridLayout(0,2)
-
-	);
+	metaBox.setLayout(new GridLayout(0,2));
 
 	metaBox.add(titleLabel);
 	metaBox.add(titleTextField);
@@ -141,24 +137,40 @@ public class BookPanel extends JPanel {
 	metaBox.add(wordLabel);
 	metaBox.add(wordBox);
 	//empty label becaus of ugly layout
-	metaBox.add(new
-
-	Label("")
-
-	);
+	metaBox.add(new Label(""));
 	metaBox.add(okButton);
 
 	add(metaBox);
 
 	//then get the resultset for the table
 	ResultSet bookResult = db.executeSelect("Select * from Buch;");
-	bookTable=new
+	bookTable=new JTable(getTableContent(bookResult, bookTableHeader.length),bookTableHeader){
+		public boolean isCellEditable(int rowIndex, int colIndex) {
+			return false;   //Disallow the editing of any cell
+		}
+	};
 
-	JTable(getTableContent(bookResult, bookTableHeader.length),bookTableHeader
 
-	);
-
-
+		bookTable.addMouseListener(new MouseListener() {
+		@Override
+		public void mouseClicked(MouseEvent mouseEvent) {
+			if(mouseEvent.getClickCount() == 2) {
+				new EditBookPopUp(db);
+			}
+		}
+		@Override
+		public void mousePressed(MouseEvent mouseEvent) {
+		}
+		@Override
+		public void mouseReleased(MouseEvent mouseEvent) {
+		}
+		@Override
+		public void mouseEntered(MouseEvent mouseEvent) {
+		}
+		@Override
+		public void mouseExited(MouseEvent mouseEvent) {
+		}
+	});
 	JScrollPane scrollPane = new JScrollPane(bookTable);
 
 	add(scrollPane);
