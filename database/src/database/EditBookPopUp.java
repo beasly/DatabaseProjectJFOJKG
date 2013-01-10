@@ -18,7 +18,6 @@ public class EditBookPopUp extends JFrame {
 
 	public EditBookPopUp(CheckURL db){
 		setTitle("Buch aendern.");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		setSize(400, 400);
 

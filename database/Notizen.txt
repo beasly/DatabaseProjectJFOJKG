@@ -44,6 +44,8 @@ Implementierung:
 		
 		Buch :
 
+			-ISBN AUF RICHTIGKEIT ÜBERPRÜFEN
+
 			-Titel (Textfeld)
 			-Preis (Textfeld)
 			-ISBN (Textfeld) // ISBN13 
