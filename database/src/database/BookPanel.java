@@ -29,7 +29,7 @@ public class BookPanel extends JPanel {
 	//not all depends on the metabox.. for the first try, i just implemented all book attributes
 	private String[] bookTableHeader = new String[]{"ISBN", "Preis", "Titel"};
 
-	public BookPanel(CheckURL db) {
+	public BookPanel(final CheckURL db) {
 		setLayout(new GridLayout(2, 1));
 		//adds Metabox
 		JPanel metaBox = new JPanel();
@@ -46,11 +46,16 @@ public class BookPanel extends JPanel {
 		String[] genreArray = db.resultSetToStringArray(genreResultSet, 1);
 		final JComboBox genreBox = new JComboBox(genreArray);
 
-		JLabel authorLabel = new JLabel("Autor");
-		ResultSet authorResultSet = db.executeSelect("Select Name from Autoren;");
-		String[] authorArray = db.resultSetToStringArray(authorResultSet, 1);
+		JLabel nn_authorLabel = new JLabel("Autor Nachname");
+		ResultSet nn_authorResultSet = db.executeSelect("Select Name from Autoren;");
+		String[] nn_authorArray = db.resultSetToStringArray(nn_authorResultSet, 1);
 
-		final JComboBox authorBox = new JComboBox(authorArray);
+    JLabel vn_authorLabel = new JLabel("Autor Vorname");
+    ResultSet vn_authorResultSet = db.executeSelect("Select Vorname from Autoren;");
+    String[] vn_authorArray = db.resultSetToStringArray(vn_authorResultSet, 1);
+
+		final JComboBox nn_authorBox = new JComboBox(nn_authorArray);
+    final JComboBox vn_authorBox = new JComboBox(vn_authorArray);
 		JLabel publisherLabel = new JLabel("Verlag");
 		ResultSet publisherResultSet = db.executeSelect("Select Name from Verlag;");
 		String[] publisherArray = db.resultSetToStringArray(publisherResultSet, 1);
@@ -81,24 +86,82 @@ public class BookPanel extends JPanel {
 				String title = titleTextField.getText();
 			  //ISBN ueber die regulaeren Ausdruck pruefen---> Jufi Methode
 				String isbn = isbnTextField.getText();
+
 				if (title.equals("") || isbn.equals("")) {
 					JOptionPane jOptionPane = new JOptionPane();
 					JOptionPane.showMessageDialog(jOptionPane, "Sie haben keinen Titel oder keine ISBN eingetragen.", "Buchtitel", JOptionPane.ERROR_MESSAGE);
 				} else {
-					if (priceTextField.getText().equals(null)) {
-						Double price = Double.parseDouble(priceTextField.getText());
-					} else {
-						Double price = null;
+          Float price = null;
+					if (!priceTextField.getText().equals(null)) {
+						price = Float.parseFloat(priceTextField.getText());
 					}
 					String genre = (String) genreBox.getSelectedItem();
-					String author = (String) authorBox.getSelectedItem();
+					String nn_author = (String) nn_authorBox.getSelectedItem();
+          String vn_author = (String) vn_authorBox.getSelectedItem();
 					String publisher = (String) publisherBox.getSelectedItem();
 					String shelf = (String) shelfBox.getSelectedItem();
 
 					Date date = jDateChooser.getDate();
 					String word = (String) wordBox.getSelectedItem();
 
+          // SQL HELP
+
+          //GenreID
+          int genreid = 0;
+          ResultSet rs_genreid = db.executeSelect("SELECT genreid FROM genre WHERE genre ='"+genre+"'");
+          try {
+            rs_genreid.next();
+            genreid = rs_genreid.getInt("genreid");
+          } catch (SQLException e) {
+          }
+
+          //AutorenID
+          int autorenid = 0;
+          ResultSet rs_autorenid = db.executeSelect("SELECT autorenid FROM autoren WHERE vorname='"+vn_author+"' AND name='"+nn_author+"'");
+          try {
+            rs_autorenid.next();
+            autorenid = rs_autorenid.getInt("autorenid");
+          } catch (SQLException e) {
+            e.printStackTrace();
+          }
+          System.out.println("Autorenid"+autorenid);
+          System.out.println("Vn_autor"+vn_author);
+          System.out.println("nn_autor"+nn_author);
+
+          //VerlagID
+          int verlagsid = 0;
+          ResultSet rs_verlagsid = db.executeSelect("SELECT verlagsid FROM verlag WHERE name='"+publisher+("'"));
+          try {
+            rs_verlagsid.next();
+            verlagsid = rs_verlagsid.getInt("verlagsid");
+          } catch (SQLException e) {
+          }
+
+          //RegalID
+          int regalid = 0;
+          ResultSet rs_regalid = db.executeSelect("SELECT regalid FROM regal WHERE ort='"+shelf+("'"));
+          try {
+            rs_regalid.next();
+            regalid = rs_regalid.getInt("regalid");
+          } catch (SQLException e) {
+          }
+
+          //SchlagwortID
+          int schlagwortid = 0;
+          ResultSet rs_schlagwortid = db.executeSelect("SELECT schlagwortid FROM schlagwort WHERE schlagwort='"+word+("'"));
+          try {
+            rs_schlagwortid.next();
+            schlagwortid = rs_schlagwortid.getInt("schlagwortid");
+          } catch (SQLException e) {
+          }
+
 					//INSERT IN TABLES
+          db.executeChanges("INSERT INTO buch (isbn, preis, titel) VALUES ('"+isbn+("', ")+price+(", '")+title+("')"));
+          db.executeChanges("INSERT INTO hatgenre (buch, genre) VALUES ('"+isbn+("', ")+genreid+(")"));
+          db.executeChanges("INSERT INTO geschriebenvon (buch, autoren) VALUES ('" + isbn + ("', ") + autorenid + (")"));
+          db.executeChanges("INSERT INTO veroeffentlichtvon (buch, verlag, datum) VALUES ('"+isbn+("', "+verlagsid+(" , '")+date+("')")));
+          db.executeChanges("INSERT INTO liegtin (buch, regal) VALUES ('" + isbn + ("', ") + regalid + (")"));
+          db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
 			}
 
 		}
@@ -126,8 +189,11 @@ public class BookPanel extends JPanel {
 	metaBox.add(genreLabel);
 	metaBox.add(genreBox);
 
-	metaBox.add(authorLabel);
-	metaBox.add(authorBox);
+	metaBox.add(nn_authorLabel);
+	metaBox.add(nn_authorBox);
+
+  metaBox.add(vn_authorLabel);
+  metaBox.add(vn_authorBox);
 
 	metaBox.add(publisherLabel);
 	metaBox.add(publisherBox);
