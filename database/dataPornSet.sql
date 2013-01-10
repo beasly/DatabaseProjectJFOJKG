@@ -28,7 +28,7 @@ INSERT INTO veroeffentlichtvon VALUES ('978-3897211971',1,'01/01/01');
 INSERT INTO veroeffentlichtvon VALUES ('978-3897213326',1,'01/01/01');
 INSERT INTO veroeffentlichtvon VALUES ('978-0596006976',1,'01/01/01');
 INSERT INTO veroeffentlichtvon VALUES ('978-3423214124',2,'01/10/01');
-INSERT INTO veroeffentlichtvon VALUES ('978-3827418241',3,'01/05/08'); 
+INSERT INTO veroeffentlichtvon VALUES ('978-3827418241',3,'01/05/08');
 
 INSERT INTO Regal VALUES (DEFAULT, 'WohnzimmerLinks');
 INSERT INTO Regal VALUES (DEFAULT, 'WohnzimmerRechts');
@@ -61,5 +61,20 @@ INSERT INTO ausgeliehenan VALUES ('978-3897211971',3, '04/08/12');
 INSERT INTO ausgeliehenan VALUES ('978-3897213326',3, '04/08/12');
 INSERT INTO ausgeliehenan VALUES ('978-3827418241',3, '04/08/12');
 INSERT INTO ausgeliehenan VALUES ('978-0596006976',3, '04/08/12');
+
+GRANT ALL PRIVILEGES ON TABLE buch TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE ausgeliehenan TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE ausleiher TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE autoren TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE genre TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE geschriebenvon TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE hatgenre TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE hatschlagwort TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE liegtin TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE regal TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE schlagwort TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE verlag TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE veroeffentlichtvon TO _s0538977__buechersammlung_generic;
+
 
 
