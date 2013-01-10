@@ -1,3 +1,4 @@
+CREATE OR REPLACE VIEW overview AS
 SELECT buch.titel as buch, string_agg(autoren.name || ' ' || autoren.vorname, ', ') as autor, verlag.name as verlag, regal.ort as regal, genre.genre as genre, schlagwort.schlagwort as schlagwort, ausleiher.vorname ||  ' ' || ausleiher.name as ausleiher
 from buch, autoren, geschriebenvon, verlag, veroeffentlichtvon, regal, liegtin, genre, hatgenre, schlagwort, hatschlagwort, ausleiher, ausgeliehenan 
 where buch.isbn = geschriebenvon.buch and autoren.autorenid = geschriebenvon.autoren and
