@@ -29,6 +29,7 @@ public class BookPanel extends JPanel {
 	//not all depends on the metabox.. for the first try, i just implemented all book attributes
 	private String[] bookTableHeader = new String[]{"ISBN", "Preis", "Titel"};
 
+
 	public BookPanel(final CheckURL db) {
 		setLayout(new GridLayout(2, 1));
 		//adds Metabox
@@ -162,7 +163,9 @@ public class BookPanel extends JPanel {
           db.executeChanges("INSERT INTO veroeffentlichtvon (buch, verlag, datum) VALUES ('"+isbn+("', "+verlagsid+(" , '")+date+("')")));
           db.executeChanges("INSERT INTO liegtin (buch, regal) VALUES ('" + isbn + ("', ") + regalid + (")"));
           db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
-			}
+
+
+        }
 
 		}
 	}
@@ -209,7 +212,8 @@ public class BookPanel extends JPanel {
 	add(metaBox);
 
 	//then get the resultset for the table
-	ResultSet bookResult = db.executeSelect("Select * from Buch;");
+
+  final ResultSet bookResult = db.executeSelect("Select * from Buch;");
 	bookTable=new JTable(getTableContent(bookResult, bookTableHeader.length),bookTableHeader){
 		public boolean isCellEditable(int rowIndex, int colIndex) {
 			return false;   //Disallow the editing of any cell
@@ -221,8 +225,13 @@ public class BookPanel extends JPanel {
 		@Override
 		public void mouseClicked(MouseEvent mouseEvent) {
 			if(mouseEvent.getClickCount() == 2) {
-				new EditBookPopUp(db);
-			}
+        try {
+          bookResult.absolute(bookTable.getSelectedColumn());
+          new EditBookPopUp(db, bookResult.getString("isbn"));
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
 		}
 		@Override
 		public void mousePressed(MouseEvent mouseEvent) {
