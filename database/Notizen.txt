@@ -17,6 +17,8 @@ Anforderungen:
 		-Funktion enthält eine Schleife auf Basis eine Cursors oder Iterators
 		-Transaktionen: Ausleiher muss erst eingetragen sein, bevor man 
 
+		- ZUSAMMENFÜHRUNG VORNAME NACHNAME AUTOR NICHT ÜBER JAVA SONDERN 
+
 
 Implementierung:
 

@@ -100,6 +100,19 @@ public class CheckURL {
 		return resultList.toArray(new String[0]);
 	}
 
+	public String[] resultSetToStringArrayWithTwo(ResultSet resultSet, int columnIndex, int columnIndexTwo) {
+		LinkedList<String> resultList = new LinkedList<String>();
+
+		try {
+			while (resultSet.next()) {
+				resultList.add(resultSet.getString(columnIndex) +", "+ resultSet.getString(columnIndexTwo));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return resultList.toArray(new String[0]);
+	}
 
 
 

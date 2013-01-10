@@ -19,6 +19,7 @@ public class EditBookPopUp extends JFrame {
 	public EditBookPopUp(CheckURL db){
 		setTitle("Buch aendern.");
 		setVisible(true);
+		setAlwaysOnTop(true);
 		setSize(400, 400);
 
 		JLabel titleLabel = new JLabel("Titel");
