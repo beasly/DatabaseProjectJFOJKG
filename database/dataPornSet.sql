@@ -54,6 +54,7 @@ INSERT INTO hatSchlagwort VALUES ('978-3423214124', 2);
 
 INSERT INTO Ausleiher VALUES (DEFAULT, 'Julianus muhammad', 'Finkus', 'jufikus@hamas.ir');
 INSERT INTO Ausleiher VALUES (DEFAULT, 'Ozzy', 'Ozkerus', 'ozky@hotmail.sz');
+INSERT INTO Ausleiher VALUES (DEFAULT, 'Nicht', 'verliehen', ' ');
 
 INSERT INTO ausgeliehenan VALUES ('978-3423214124',2, '04/08/12');
 
