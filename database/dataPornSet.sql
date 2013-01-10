@@ -28,7 +28,7 @@ INSERT INTO veroeffentlichtvon VALUES ('978-3897211971',1,'01/01/01');
 INSERT INTO veroeffentlichtvon VALUES ('978-3897213326',1,'01/01/01');
 INSERT INTO veroeffentlichtvon VALUES ('978-0596006976',1,'01/01/01');
 INSERT INTO veroeffentlichtvon VALUES ('978-3423214124',2,'01/10/01');
-INSERT INTO veroeffentlichtvon VALUES ('978-3827418241',3,'01/05/08'); 
+INSERT INTO veroeffentlichtvon VALUES ('978-3827418241',3,'01/05/08');
 
 INSERT INTO Regal VALUES (DEFAULT, 'WohnzimmerLinks');
 INSERT INTO Regal VALUES (DEFAULT, 'WohnzimmerRechts');
@@ -40,6 +40,17 @@ INSERT INTO liegtin VALUES ('978-3897211971',4);
 INSERT INTO liegtin VALUES ('978-3897213326',4);
 INSERT INTO liegtin VALUES ('978-0596006976',4);
 INSERT INTO liegtin VALUES ('978-3827418241',5);
+
+INSERT INTO genre VALUES ( DEFAULT, 'Fahliteratur' );
+INSERT INTO genre VALUES ( DEFAULT, 'Roman');
+INSERT INTO genre VALUES ( DEFAULT, 'Sci-Fi');
+INSERT INTO genre VALUES ( DEFAULT, '1337-teratur');
+
+INSERT INTO hatgenre VALUES ('978-3897211971', 4);
+INSERT INTO hatgenre VALUES ('978-3897213326', 1);
+INSERT INTO hatgenre VALUES ('978-0596006976', 1);
+INSERT INTO hatgenre VALUES ('978-3827418241', 3);
+INSERT INTO hatgenre VALUES ('978-3423214124', 2);
 
 INSERT INTO Schlagwort VALUES (DEFAULT, 'Programmieren');
 INSERT INTO Schlagwort VALUES (DEFAULT, 'Hobbit' );
@@ -54,8 +65,27 @@ INSERT INTO hatSchlagwort VALUES ('978-3423214124', 2);
 
 INSERT INTO Ausleiher VALUES (DEFAULT, 'Julianus muhammad', 'Finkus', 'jufikus@hamas.ir');
 INSERT INTO Ausleiher VALUES (DEFAULT, 'Ozzy', 'Ozkerus', 'ozky@hotmail.sz');
+INSERT INTO Ausleiher VALUES (DEFAULT, 'Nicht', 'verliehen', ' ');
 
 INSERT INTO ausgeliehenan VALUES ('978-3423214124',2, '04/08/12');
+INSERT INTO ausgeliehenan VALUES ('978-3897211971',3, '04/08/12');
+INSERT INTO ausgeliehenan VALUES ('978-3897213326',3, '04/08/12');
+INSERT INTO ausgeliehenan VALUES ('978-3827418241',3, '04/08/12');
+INSERT INTO ausgeliehenan VALUES ('978-0596006976',3, '04/08/12');
+
+GRANT ALL PRIVILEGES ON TABLE buch TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE ausgeliehenan TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE ausleiher TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE autoren TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE genre TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE geschriebenvon TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE hatgenre TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE hatschlagwort TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE liegtin TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE regal TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE schlagwort TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE verlag TO _s0538977__buechersammlung_generic;
+GRANT ALL PRIVILEGES ON TABLE veroeffentlichtvon TO _s0538977__buechersammlung_generic;
 
 
 
