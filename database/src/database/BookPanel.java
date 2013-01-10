@@ -212,19 +212,24 @@ public class BookPanel extends JPanel {
 	add(metaBox);
 
 	//then get the resultset for the table
-	ResultSet bookResult = db.executeSelect("Select * from Buch;");
-	bookTable=new JTable(getTableContent(bookResult, bookTableHeader.length),bookTableHeader){
-		public boolean isCellEditable(int rowIndex, int colIndex) {
-			return false;
-		}
-	};
+		final ResultSet bookResult = db.executeSelect("Select * from Buch;");
+		bookTable=new JTable(getTableContent(bookResult, bookTableHeader.length),bookTableHeader){
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+				return false;   //Disallow the editing of any cell
+			}
+		};
 
 
 		bookTable.addMouseListener(new MouseListener() {
 		@Override
 		public void mouseClicked(MouseEvent mouseEvent) {
 			if(mouseEvent.getClickCount() == 2) {
-				new EditBookPopUp(db);
+        try {
+          bookResult.absolute(bookTable.getSelectedColumn());
+          new EditBookPopUp(db, bookResult.getString("isbn"));
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
 			}
 		}
 		@Override
