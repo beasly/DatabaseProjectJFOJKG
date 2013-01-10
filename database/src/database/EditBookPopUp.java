@@ -16,7 +16,7 @@ import javax.swing.*;
 public class EditBookPopUp extends JFrame {
 
 
-	public EditBookPopUp(CheckURL db){
+	public EditBookPopUp(final CheckURL db, final String isbn){
 		setTitle("Buch aendern.");
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -32,7 +32,18 @@ public class EditBookPopUp extends JFrame {
 			public void actionPerformed(ActionEvent actionEvent) {
 				String title = titleTextField.getText();
 				Float price;
-				if (priceTextField.getText().equals(null)) {
+
+
+
+
+        if (!Input.isFloat(priceTextField.getText()))
+        {
+        JOptionPane jOptionPane = new JOptionPane();
+        JOptionPane.showMessageDialog(jOptionPane, "Tragen Sie einen gültigen Preis ein!", "Falsche Eingabe", JOptionPane.ERROR_MESSAGE);
+        }     else{
+
+
+        if (priceTextField.getText() != null) {
 					price = Float.parseFloat(priceTextField.getText());
 				} else {
 					price = null;
@@ -41,14 +52,16 @@ public class EditBookPopUp extends JFrame {
 						setVisible(false);
 				}else{
 					if(title != ""){
+						db.executeChanges("UPDATE buch SET titel='"+title+"' WHERE isbn='"+isbn+"'");
 						//alter title
 					}
-					if(price == null){
+					if(price != null){
+            db.executeChanges("UPDATE buch SET preis="+price+" WHERE isbn='"+price+"'");
 						//alter price
 					}
 					setVisible(false);
 				}
-
+        }
 			}
 		});
 		JButton cancelButton= new JButton("Cancel");
