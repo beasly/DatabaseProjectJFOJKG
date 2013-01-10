@@ -58,5 +58,3 @@ INSERT INTO Ausleiher VALUES (DEFAULT, 'Nicht', 'verliehen', ' ');
 
 INSERT INTO ausgeliehenan VALUES ('978-3423214124',2, '04/08/12');
 
-
-
