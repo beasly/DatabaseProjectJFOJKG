@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -29,7 +30,10 @@ public class BookPanel extends JPanel {
 
 	private JTable bookTable;
 
-	//not all depends on the metabox.. for the first try, i just implemented all book attributes
+  private JScrollPane scrollPane = new JScrollPane(bookTable);
+
+
+  //not all depends on the metabox.. for the first try, i just implemented all book attributes
 	private String[] bookTableHeader = new String[]{"ISBN", "Preis", "Titel"};
 
 	public BookPanel(final CheckURL db) {
@@ -168,7 +172,9 @@ public class BookPanel extends JPanel {
 					db.executeChanges("INSERT INTO veroeffentlichtvon (buch, verlag, datum) VALUES ('" + isbn + ("', " + verlagsid + (" , '") + date + ("')")));
 					db.executeChanges("INSERT INTO liegtin (buch, regal) VALUES ('" + isbn + ("', ") + regalid + (")"));
 					db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
-				}
+          fillJTable(db);
+
+        }
 
 			}
 		}
@@ -212,47 +218,132 @@ public class BookPanel extends JPanel {
 	add(metaBox);
 
 	//then get the resultset for the table
-		final ResultSet bookResult = db.executeSelect("Select * from Buch;");
-		bookTable=new JTable(getTableContent(bookResult, bookTableHeader.length),bookTableHeader){
-			public boolean isCellEditable(int rowIndex, int colIndex) {
-				return false;   //Disallow the editing of any cell
-			}
-		};
 
+  fillJTable(db);
 
-		bookTable.addMouseListener(new MouseListener() {
-		@Override
-		public void mouseClicked(MouseEvent mouseEvent) {
-			if(mouseEvent.getClickCount() == 2) {
-        try {
-          bookResult.absolute(bookTable.getSelectedColumn());
-          new EditBookPopUp(db, bookResult.getString("isbn"));
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-			}
-		}
-		@Override
-		public void mousePressed(MouseEvent mouseEvent) {
-		}
-		@Override
-		public void mouseReleased(MouseEvent mouseEvent) {
-		}
-		@Override
-		public void mouseEntered(MouseEvent mouseEvent) {
-		}
-		@Override
-		public void mouseExited(MouseEvent mouseEvent) {
-		}
-	});
-	JScrollPane scrollPane = new JScrollPane(bookTable);
 
 	add(scrollPane);
 
 }
 
+  public void fillJTable(final CheckURL db) {
 
-	public String[][] getTableContent(ResultSet bookResult, int columnLength) {
+    ResultSet bookResult = db.executeSelect("Select * from Buch;");
+    bookTable=new JTable(getTableContent(bookResult, bookTableHeader.length),bookTableHeader){
+      public boolean isCellEditable(int rowIndex, int colIndex) {
+        return false;   //Disallow the editing of any cell
+      }
+    };
+    bookTable.addMouseListener(new MouseListener() {
+      @Override
+      public void mouseClicked(MouseEvent mouseEvent) {
+        if(mouseEvent.getClickCount() == 2) {
+          makeUpdatePopUp(db);
+
+        }
+
+      }
+      @Override
+      public void mousePressed(MouseEvent mouseEvent) {
+      }
+      @Override
+      public void mouseReleased(MouseEvent mouseEvent) {
+      }
+      @Override
+      public void mouseEntered(MouseEvent mouseEvent) {
+      }
+      @Override
+      public void mouseExited(MouseEvent mouseEvent) {
+      }
+    });
+
+    remove(scrollPane);
+    scrollPane = new JScrollPane(bookTable);
+    add(scrollPane);
+
+  }
+
+  private void makeUpdatePopUp(final CheckURL db) {
+    final String isbn = bookTable.getValueAt(bookTable.getSelectedRow(), 0).toString();
+    final JFrame updateFrame = new JFrame();
+    updateFrame.setTitle("Buch aendern.");
+    updateFrame.setVisible(true);
+    updateFrame.setAlwaysOnTop(true);
+    updateFrame.setSize(400, 400);
+
+    JLabel titleLabel = new JLabel("Titel");
+    final JTextField titleTextField = new JTextField();
+    JLabel priceLabel = new JLabel("Preis");
+    final JTextField priceTextField = new JTextField();
+    JButton okButton = new JButton("OK");
+    okButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent) {
+        String title = titleTextField.getText();
+        Float price = null;
+
+
+        if (priceTextField.getText() != null && !Input.isFloat(priceTextField.getText())) {
+          JOptionPane jOptionPane = new JOptionPane();
+          JOptionPane.showMessageDialog(jOptionPane, "Tragen Sie einen gültigen Preis ein!", "Falsche Eingabe", JOptionPane.ERROR_MESSAGE);
+        } else {
+
+          if (!priceTextField.getText().equals("")) {
+            price = Float.parseFloat(priceTextField.getText());
+          } else {
+            price = null;
+          }
+          if (title == "" && price == null) {
+            updateFrame.setVisible(false);
+          } else {
+            if (!title.equals("")) {
+              System.out.println(title + " dkjsflduasghf a");
+              db.executeChanges("UPDATE buch SET titel='" + title + "' WHERE isbn='" + isbn + "'");
+              //alter title
+            }
+            if (price != null) {
+              System.out.println(price);
+              db.executeChanges("UPDATE buch SET preis=" + price + " WHERE isbn='" + isbn + "'");
+              //alter price
+            }
+            updateFrame.setVisible(false);
+            fillJTable(db);
+          }
+        }
+      }
+    }
+
+    );
+    JButton cancelButton = new JButton("Cancel");
+    cancelButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent) {
+        updateFrame.setVisible(false);
+      }
+    }
+
+    );
+
+    updateFrame.setLayout(new GridLayout(0, 2)
+
+    );
+
+    updateFrame.add(titleLabel);
+
+    updateFrame.add(titleTextField);
+
+    updateFrame.add(priceLabel);
+
+    updateFrame.add(priceTextField);
+
+    updateFrame.add(cancelButton);
+
+    updateFrame.add(okButton);
+
+
+  }
+
+  public String[][] getTableContent(ResultSet bookResult, int columnLength) {
 		String[][] tableContent = null;
 		try {
 			//getrowCount
