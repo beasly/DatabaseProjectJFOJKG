@@ -14,7 +14,7 @@ public class HomePanel extends JPanel {
 
 	private JTable homeTable;
 
-	private String[] homeTableHeader = new String[]{"Buch", "Autor", "Verlag", "Genre", "Schlagwort", "Regal", "Ausleiher"};
+	private String[] homeTableHeader = new String[]{"Buch", "Autor", "Verlag", "Genre", "Schlagwort", "Regal", "verliehen an"};
 
 	private JScrollPane homePane = new JScrollPane();
 

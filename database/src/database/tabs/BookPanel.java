@@ -37,13 +37,11 @@ public class BookPanel extends JPanel {
 	public BookPanel(final CheckURL db) {
 		setLayout(new GridLayout(2, 1));
 		generateMetaBoxComponents(db);
-		add(metaBox);
 		updateAndAddTable(db);
 		add(scrollPane);
 	}
 
-	private void generateMetaBoxComponents(final CheckURL db) {
-
+	public void generateMetaBoxComponents(final CheckURL db) {
 		JLabel titleLabel = new JLabel("Titel");
 		final JTextField titleTextField = new JTextField();
 		JLabel priceLabel = new JLabel("Preis");
@@ -90,6 +88,8 @@ public class BookPanel extends JPanel {
 				getAllContentOfComponentsAndInsert(titleTextField, isbnTextField, priceTextField, genreBox, authorBox, publisherBox, shelfBox, jDateChooser, wordBox, db);
 			}
 		});
+		remove(metaBox);
+		metaBox = new JPanel();
 		//layouting  and adding components
 		metaBox.setLayout(new GridLayout(0, 2));
 		metaBox.add(titleLabel);
@@ -113,6 +113,7 @@ public class BookPanel extends JPanel {
 		//empty label becaus of ugly layout
 		metaBox.add(new Label(""));
 		metaBox.add(okButton);
+		add(metaBox);
 	}
 
 	public void updateAndAddTable(final CheckURL db) {
@@ -277,22 +278,22 @@ public class BookPanel extends JPanel {
 		return id;
 	}
 
-	private String[][] getTableContent(ResultSet bookResult, int columnLength) {
+	private String[][] getTableContent(ResultSet resultSet, int columnLength) {
 		String[][] tableContent = null;
 		try {
 			int rowCount = 0;
 			//getrowCount		int rowCount = 0;
-			while (bookResult.next()) {
+			while (resultSet.next()) {
 				rowCount++;
 			}
-			bookResult.beforeFirst();
+			resultSet.beforeFirst();
 			//set tablecontent
 			tableContent = new String[rowCount][columnLength];
 			int rowIndex = 0;
-			while (bookResult.next()) {
-				tableContent[rowIndex][0] = bookResult.getString("ISBN");
-				tableContent[rowIndex][1] = String.valueOf(bookResult.getFloat("Preis"));
-				tableContent[rowIndex][2] = bookResult.getString("Titel");
+			while (resultSet.next()) {
+				tableContent[rowIndex][0] = resultSet.getString("ISBN");
+				tableContent[rowIndex][1] = String.valueOf(resultSet.getFloat("Preis"));
+				tableContent[rowIndex][2] = resultSet.getString("Titel");
 				rowIndex++;
 			}
 		} catch (SQLException e) {
