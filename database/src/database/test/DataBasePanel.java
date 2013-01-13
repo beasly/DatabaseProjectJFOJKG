@@ -1,4 +1,4 @@
-package database;
+package database.test;
 
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;

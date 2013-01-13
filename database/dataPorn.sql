@@ -2,7 +2,7 @@
 CREATE TABLE Buch(
 ISBN varchar(14) not null primary key,
 Preis float(2),
-Titel varchar(40) not null);
+Titel varchar(100) not null);
 
 CREATE TABLE Ausleiher(
 AusleiherID serial primary key,
