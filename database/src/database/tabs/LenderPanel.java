@@ -1,6 +1,5 @@
 package database.tabs;
 
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,15 +12,23 @@ import javax.swing.*;
 
 import database.CheckURL;
 
-public class AuthorPanel extends JPanel {
+/**
+ * Created with IntelliJ IDEA.
+ * User: kevingoy
+ * Date: 14.01.13
+ * Time: 16:07
+ * To change this template use File | Settings | File Templates.
+ */
+public class LenderPanel extends JPanel{
+
 
 	private JPanel metaBox = new JPanel();
-	private JTable authorTable;
-	private JScrollPane scrollPane = new JScrollPane(authorTable);
-	private String[] authorTableHeader = new String[]{"Name", "Vorname"};
+	private JTable lenderTable;
+	private JScrollPane scrollPane = new JScrollPane(lenderTable);
+	private String[] lenderTableHeader = new String[]{"Name", "Vorname", "Email"};
 	private CheckURL db;
 
-	public AuthorPanel(CheckURL db) {
+	public LenderPanel(CheckURL db) {
 		this.db = db;
 		setLayout(new GridLayout(2, 1));
 		generateMetaBoxComponents();
@@ -31,31 +38,39 @@ public class AuthorPanel extends JPanel {
 	}
 
 	public void updateAndAddTable() 	{
-		ResultSet authorSet = db.executeSelect("Select * from autoren");
-		authorTable = new JTable(getTableContent(authorSet, authorTableHeader.length), authorTableHeader){
+		ResultSet authorSet = db.executeSelect("Select * from ausleiher");
+		lenderTable = new JTable(getTableContent(authorSet, lenderTableHeader.length), lenderTableHeader){
 			public boolean isCellEditable(int rowIndex, int colIndex) {
 				return false;   //Disallow the editing of any cell
 			}
 		};
-		authorTable.setAutoCreateRowSorter(true);
-		authorTable.addMouseListener(new MouseListener() {
+		lenderTable.setAutoCreateRowSorter(true);
+		lenderTable.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent mouseEvent) {
 				if (mouseEvent.getClickCount() == 2) {
 					makeUpdatePopUp();
 				}
 			}
+
 			@Override
-			public void mousePressed(MouseEvent mouseEvent) {}
+			public void mousePressed(MouseEvent mouseEvent) {
+			}
+
 			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {}
+			public void mouseReleased(MouseEvent mouseEvent) {
+			}
+
 			@Override
-			public void mouseEntered(MouseEvent mouseEvent) {}
+			public void mouseEntered(MouseEvent mouseEvent) {
+			}
+
 			@Override
-			public void mouseExited(MouseEvent mouseEvent) {}
+			public void mouseExited(MouseEvent mouseEvent) {
+			}
 		});
 		remove(scrollPane);
-		scrollPane = new JScrollPane(authorTable);
+		scrollPane = new JScrollPane(lenderTable);
 		add(scrollPane);
 
 	}
@@ -64,14 +79,17 @@ public class AuthorPanel extends JPanel {
 		JLabel nameLabel = new JLabel("Name");
 		final JTextField nameTextField = new JTextField();
 
-		final JLabel firstNameLabel = new JLabel("Vorname");
+		JLabel firstNameLabel = new JLabel("Vorname");
 		final JTextField firstNameTextField = new JTextField();
+
+		JLabel mailLabel = new JLabel("Email");
+		final JTextField mailTextField = new JTextField();
 
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				getAllContentOfComponentsAndInsert(nameTextField, firstNameTextField);
+				getAllContentOfComponentsAndInsert(nameTextField, firstNameTextField, mailTextField);
 			}
 		});
 		metaBox.setLayout(new GridLayout(0, 2));
@@ -80,18 +98,20 @@ public class AuthorPanel extends JPanel {
 		metaBox.add(nameTextField);
 		metaBox.add(firstNameLabel);
 		metaBox.add(firstNameTextField);
+		metaBox.add(mailLabel);
+		metaBox.add(mailTextField);
 		metaBox.add(new Label(""));
 		metaBox.add(okButton);
 	}
 
 	private void makeUpdatePopUp() {
-		int autorenID = 0;
-		final String name = String.valueOf(authorTable.getValueAt(authorTable.getSelectedRow(), 0));
-		final String firstName = String.valueOf(authorTable.getValueAt(authorTable.getSelectedRow(), 1));
-		ResultSet rs_autorenid = db.executeSelect("SELECT autorenid FROM autoren WHERE name='" + name + "' AND vorname='" + firstName + "'");
+		int lenderID = 0;
+		final String name = String.valueOf(lenderTable.getValueAt(lenderTable.getSelectedRow(), 0));
+		final String firstName = String.valueOf(lenderTable.getValueAt(lenderTable.getSelectedRow(), 1));
+		ResultSet rs_lenderid = db.executeSelect("SELECT Ausleiherid FROM ausleiher WHERE name='" + name + "' AND vorname='" + firstName + "'");
 		try {
-			rs_autorenid.next();
-			autorenID = rs_autorenid.getInt("autorenid");
+			rs_lenderid.next();
+			lenderID = rs_lenderid.getInt("ausleiherid");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -104,20 +124,28 @@ public class AuthorPanel extends JPanel {
 		final JTextField nameTextField = new JTextField();
 		JLabel firstNameLabel = new JLabel("Vorname");
 		final JTextField firstNameTextField = new JTextField();
+		JLabel mailLabel = new JLabel("Email");
+		final JTextField mailTextField = new JTextField();
+
 		JButton okButton = new JButton("OK");
-		final int finalAutorenID = autorenID;
+		final int finalLenderID = lenderID;
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				String newName = String.valueOf(nameTextField.getText());
-				String newFirstName = String.valueOf(firstNameTextField.getText());
-				if (!nameTextField.getText().equals("") || !firstNameTextField.getText().equals("")) {
+				String newName = nameTextField.getText();
+				String newFirstName = firstNameTextField.getText();
+				String newMail = mailTextField.getText();
+				if (!nameTextField.getText().equals("") || !firstNameTextField.getText().equals("") || !mailTextField.getText().equals("")) {
 					if(!nameTextField.getText().equals("")){
-						db.executeChanges("UPDATE autoren SET name='" + newName + "' WHERE autorenid='" + finalAutorenID + "'");
+						db.executeChanges("UPDATE ausleiher SET name='" + newName + "' WHERE AusleiherID='" + finalLenderID + "'");
 					}
 					if (!firstNameTextField.getText().equals("")) {
-						db.executeChanges("UPDATE autoren SET vorname='" + newFirstName + "' WHERE autorenid='" + finalAutorenID + "'");
+						db.executeChanges("UPDATE ausleiher SET vorname='" + newFirstName + "' WHERE AusleiherID='" + finalLenderID + "'");
 					}
+					if (!mailTextField.getText().equals("")) {
+						db.executeChanges("UPDATE ausleiher SET mail='" + newMail + "' WHERE AusleiherID='" + finalLenderID + "'");
+					}
+					
 					updateFrame.setVisible(false);
 					updateAndAddTable();
 				}
@@ -135,17 +163,20 @@ public class AuthorPanel extends JPanel {
 		updateFrame.add(nameTextField);
 		updateFrame.add(firstNameLabel);
 		updateFrame.add(firstNameTextField);
+		updateFrame.add(mailLabel);
+		updateFrame.add(mailTextField);		
 		updateFrame.add(cancelButton);
 		updateFrame.add(okButton);
 
 
 	}
 
-	private void getAllContentOfComponentsAndInsert(JTextField nameTextField, JTextField firstNameTextField) {
+	private void getAllContentOfComponentsAndInsert(JTextField nameTextField, JTextField firstNameTextField, JTextField mailTextField) {
 		String name = nameTextField.getText();
 		String firstName = firstNameTextField.getText();
+		String mail = mailTextField.getText();
 		boolean validName = true;
-		ResultSet authorSet = db.executeSelect("Select * from autoren");
+		ResultSet authorSet = db.executeSelect("Select * from ausleiher");
 		try {
 			while (authorSet.next()) {
 				if (authorSet.getString(2).equals(name) && authorSet.getString(1).equals(firstName)) {
@@ -156,7 +187,7 @@ public class AuthorPanel extends JPanel {
 			e.printStackTrace();
 		}
 		if (validName && !name.equals("") && !firstName.equals("")) {
-			db.executeChanges("INSERT INTO autoren Values(DEFAULT,'" + name + "','" + firstName + "')");
+			db.executeChanges("INSERT INTO ausleiher Values(DEFAULT,'" + name + "','" + firstName + "','" + mail + "')");
 			updateAndAddTable();
 		} else {
 			JOptionPane jOptionPane = new JOptionPane();
@@ -178,6 +209,7 @@ public class AuthorPanel extends JPanel {
 			while (resultSet.next()) {
 				tableContent[rowIndex][0] = resultSet.getString("Name");
 				tableContent[rowIndex][1] = resultSet.getString("Vorname");
+				tableContent[rowIndex][2] = resultSet.getString("Email");
 				rowIndex++;
 			}
 		} catch (SQLException e) {
@@ -185,4 +217,5 @@ public class AuthorPanel extends JPanel {
 		}
 		return tableContent;
 	}
+
 }

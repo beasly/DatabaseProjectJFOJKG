@@ -13,7 +13,7 @@ Email varchar(30));
 CREATE TABLE Verlag(
 VerlagsID serial primary key,
 Name varchar(30) not null,
-Ort varchar(15));
+Ort varchar(25));
 
 CREATE TABLE Regal(
 RegalID serial primary key,
@@ -21,16 +21,16 @@ Ort varchar(30) not null);
 
 CREATE TABLE Autoren(
 AutorenID serial primary key,
-Vorname varchar(20),
-Name varchar(20) not null);
+Vorname varchar(30),
+Name varchar(30) not null);
 
 CREATE TABLE Schlagwort(
 SchlagwortID serial primary key,
-Schlagwort varchar(20) not null);
+Schlagwort varchar(30) not null);
 
 CREATE TABLE Genre(
 GenreID serial primary key,
-Genre varchar(20) not null);
+Genre varchar(30) not null);
 
 CREATE TABLE veroeffentlichtVon(
 Buch varchar(14) references Buch(ISBN) on delete cascade,

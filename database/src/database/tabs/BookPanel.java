@@ -33,15 +33,16 @@ public class BookPanel extends JPanel {
 	private JTable bookTable;
 	private JScrollPane scrollPane = new JScrollPane(bookTable);
 	private String[] bookTableHeader = new String[]{"ISBN", "Preis", "Titel"};
+	private CheckURL db;
 
-	public BookPanel(final CheckURL db) {
+	public BookPanel(CheckURL db) {
+		this.db = db;
 		setLayout(new GridLayout(2, 1));
-		generateMetaBoxComponents(db);
-		updateAndAddTable(db);
-		add(scrollPane);
+		generateMetaBoxComponents();
+		updateAndAddTable();
 	}
 
-	public void generateMetaBoxComponents(final CheckURL db) {
+	public void generateMetaBoxComponents() {
 		JLabel titleLabel = new JLabel("Titel");
 		final JTextField titleTextField = new JTextField();
 		JLabel priceLabel = new JLabel("Preis");
@@ -116,7 +117,7 @@ public class BookPanel extends JPanel {
 		add(metaBox);
 	}
 
-	public void updateAndAddTable(final CheckURL db) {
+	public void updateAndAddTable() {
 		final ResultSet bookResult = db.executeSelect("Select * from Buch;");
 		bookTable = new JTable(getTableContent(bookResult, bookTableHeader.length), bookTableHeader) {
 			public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -128,7 +129,7 @@ public class BookPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent mouseEvent) {
 				if (mouseEvent.getClickCount() == 2) {
-					makeUpdatePopUp(db);
+					makeUpdatePopUp();
 				}
 			}
 			@Override
@@ -177,7 +178,7 @@ public class BookPanel extends JPanel {
 			Date date = jDateChooser.getDate();
 			String word = (String) wordBox.getSelectedItem();
 			//get all ID's
-			int genreid = getID(db, "SELECT genreid FROM genre WHERE genre ='", genre);
+			int genreid = getID("SELECT genreid FROM genre WHERE genre ='", genre);
 			int autorenid = 0;
 			StringTokenizer stringTokenizer = new StringTokenizer(author[0].toString());
 			String name = stringTokenizer.nextToken();
@@ -190,9 +191,9 @@ public class BookPanel extends JPanel {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			int verlagsid = getID(db, "SELECT verlagsid FROM verlag WHERE name='", publisher);
-			int regalid = getID(db, "SELECT regalid FROM regal WHERE ort='", shelf);
-			int schlagwortid = getID(db, "SELECT schlagwortid FROM schlagwort WHERE schlagwort='", word);
+			int verlagsid = getID("SELECT verlagsid FROM verlag WHERE name='", publisher);
+			int regalid = getID("SELECT regalid FROM regal WHERE ort='", shelf);
+			int schlagwortid = getID("SELECT schlagwortid FROM schlagwort WHERE schlagwort='", word);
 			//INSERT IN TABLES
 			db.executeChanges("INSERT INTO buch (isbn, preis, titel) VALUES ('" + isbn + ("', ") + price + (", '") + title + ("')"));
 			db.executeChanges("INSERT INTO hatgenre (buch, genre) VALUES ('" + isbn + ("', ") + genreid + (")"));
@@ -201,11 +202,11 @@ public class BookPanel extends JPanel {
 			db.executeChanges("INSERT INTO liegtin (buch, regal) VALUES ('" + isbn + ("', ") + regalid + (")"));
 			db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
 			//and update Table
-			updateAndAddTable(db);
+			updateAndAddTable();
 		}
 	}
 
-	private void makeUpdatePopUp(final CheckURL db) {
+	private void makeUpdatePopUp() {
 		final String isbn = bookTable.getValueAt(bookTable.getSelectedRow(), 0).toString();
 		final JFrame updateFrame = new JFrame();
 		updateFrame.setTitle("Buch aendern.");
@@ -243,7 +244,7 @@ public class BookPanel extends JPanel {
 							//alter price
 						}
 						updateFrame.setVisible(false);
-						updateAndAddTable(db);
+						updateAndAddTable();
 					}
 				}
 			}
@@ -265,7 +266,7 @@ public class BookPanel extends JPanel {
 		updateFrame.add(okButton);
 	}
 
-	private int getID(CheckURL db, String sql, String idName) {
+	private int getID(String sql, String idName) {
 		int id = 0;
 		ResultSet resultSet = db.executeSelect(sql + idName + "'");
 		try {

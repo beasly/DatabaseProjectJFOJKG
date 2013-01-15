@@ -3,8 +3,7 @@ package database.tabs;
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -18,23 +17,59 @@ public class HomePanel extends JPanel {
 
 	private JScrollPane homePane = new JScrollPane();
 
-	public HomePanel(final CheckURL db) {
-//metabox evtl. but first gridlayout with one component
+	private CheckURL db;
+
+	public HomePanel(CheckURL db) {
+		this.db = db;
 		setLayout(new GridLayout(1, 1));
+		updateAndAddTable();
 
-
-		updateAndAddTable(db);
 	}
 
-	public void updateAndAddTable(CheckURL db) {
+	public void updateAndAddTable() {
 		ResultSet bookResults = db.executeSelect("select * from overview;");
-		homeTable = new JTable(getTableContent(bookResults, homeTableHeader.length), homeTableHeader);
+		homeTable = new JTable(getTableContent(bookResults, homeTableHeader.length), homeTableHeader){
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+				return false;   //Disallow the editing of any cell
+			}
+		};
 		homeTable.setAutoCreateRowSorter(true);
 		homeTable.setRowSelectionAllowed(true);
+		final JPopupMenu popupMenu = new JPopupMenu();
+		popupMenu.add("Buch ausleihen").addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				//lendBook(homeTable.rowAtPoint(mouseEvent.getPoint()));
+			}
+		});
+		popupMenu.add(new JPopupMenu.Separator());
+		popupMenu.add("Buch wiederbekommen").addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				//	getBookBack(homeTable.rowAtPoint(mouseEvent.getPoint()));
+			}
+		});
+		homeTable.setComponentPopupMenu(popupMenu);
+		homeTable.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent mouseEvent) {
+			if(SwingUtilities.isRightMouseButton(mouseEvent)) {
+				homeTable.changeSelection(homeTable.rowAtPoint(mouseEvent.getPoint()), homeTable.rowAtPoint(mouseEvent.getPoint()), false, false);
+				popupMenu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+			}
+			}
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {				 			}
+			@Override
+			public void mouseReleased(MouseEvent mouseEvent) {			}
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent) {			}
+			@Override
+			public void mouseExited(MouseEvent mouseEvent) {			}
+		});
 		remove(homePane);
 		homePane = new JScrollPane(homeTable);
 		add(homePane);
-
 	}
 
 	//get all content of the table for the home table first, if finished do that for all tables
