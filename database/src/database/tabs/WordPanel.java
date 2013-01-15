@@ -88,6 +88,8 @@ public class WordPanel extends JPanel {
 			metaBox.add(residenceTextField);
 			metaBox.add(new Label(""));
 			metaBox.add(okButton);
+			add(metaBox);
+
 		}
 
 		private void makeUpdatePopUp() {

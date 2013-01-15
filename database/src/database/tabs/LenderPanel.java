@@ -102,6 +102,8 @@ public class LenderPanel extends JPanel{
 		metaBox.add(mailTextField);
 		metaBox.add(new Label(""));
 		metaBox.add(okButton);
+		add(metaBox);
+
 	}
 
 	private void makeUpdatePopUp() {

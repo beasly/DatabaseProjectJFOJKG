@@ -82,6 +82,8 @@ public class AuthorPanel extends JPanel {
 		metaBox.add(firstNameTextField);
 		metaBox.add(new Label(""));
 		metaBox.add(okButton);
+		add(metaBox);
+
 	}
 
 	private void makeUpdatePopUp() {

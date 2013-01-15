@@ -33,9 +33,6 @@ public class PublisherPanel extends JPanel{
 		generateMetaBoxComponents();
 		add(metaBox);
 		updateAndAddTable();
-		add(scrollPane);
-
-
 	}
 
 	public void updateAndAddTable() 	{
@@ -98,6 +95,7 @@ public class PublisherPanel extends JPanel{
 		metaBox.add(residenceTextField);
 		metaBox.add(new Label(""));
 		metaBox.add(okButton);
+		add(metaBox);
 	}
 
 	private void makeUpdatePopUp() {
