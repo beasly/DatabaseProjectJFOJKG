@@ -88,5 +88,17 @@ GRANT ALL PRIVILEGES ON TABLE schlagwort TO _s0538977__buechersammlung_generic;
 GRANT ALL PRIVILEGES ON TABLE verlag TO _s0538977__buechersammlung_generic;
 GRANT ALL PRIVILEGES ON TABLE veroeffentlichtvon TO _s0538977__buechersammlung_generic;
 
+CREATE TRIGGER rueckgabe_trigger AFTER UPDATE OF rueckgabedatum ON
+ausgeliehenan FOR EACH ROW EXECUTE PROCEDURE update_rueckgabe();
+
+CREATE OR REPLACE FUNCTION update_rueckgabe() RETURNS trigger AS $$
+BEGIN
+Delete from ausgeliehenan where buch = old.buch;
+insert into ausgeliehenan (buch, ausleiher, leihdatum) values (old.buch, 3, to_date(to_char(current_date,'dd/mm/yyyy'), 'dd/mm/yyyy'));
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 
