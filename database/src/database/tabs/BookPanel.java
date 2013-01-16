@@ -132,14 +132,22 @@ public class BookPanel extends JPanel {
 					makeUpdatePopUp();
 				}
 			}
+
 			@Override
-			public void mousePressed(MouseEvent mouseEvent) {}
+			public void mousePressed(MouseEvent mouseEvent) {
+			}
+
 			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {}
+			public void mouseReleased(MouseEvent mouseEvent) {
+			}
+
 			@Override
-			public void mouseEntered(MouseEvent mouseEvent) {}
+			public void mouseEntered(MouseEvent mouseEvent) {
+			}
+
 			@Override
-			public void mouseExited(MouseEvent mouseEvent) {}
+			public void mouseExited(MouseEvent mouseEvent) {
+			}
 		});
 		remove(scrollPane);
 		scrollPane = new JScrollPane(bookTable);
@@ -163,12 +171,12 @@ public class BookPanel extends JPanel {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (title.equals("") || isbn.equals("") || !m.matches() || !validIsbn) {
+		if (title.equals("") || isbn.equals("") || ! m.matches() || ! validIsbn) {
 			JOptionPane jOptionPane = new JOptionPane();
 			JOptionPane.showMessageDialog(jOptionPane, "Sie haben keinen Titel oder keine bzw. keine gueltige ISBN eingetragen.", "Buchtitel", JOptionPane.ERROR_MESSAGE);
 		} else {
 			Float price = Float.valueOf(0);
-			if (!priceTextField.getText().equals("")) {
+			if (! priceTextField.getText().equals("")) {
 				price = Float.parseFloat(priceTextField.getText());
 			}
 			String genre = (String) genreBox.getSelectedItem();
@@ -184,8 +192,8 @@ public class BookPanel extends JPanel {
 			String name = stringTokenizer.nextToken();
 			String firstName = new String();
 			//because of more than one firstName
-			while(stringTokenizer.hasMoreTokens()){
-				if(!firstName.equals(new String())) {
+			while (stringTokenizer.hasMoreTokens()) {
+				if (! firstName.equals(new String())) {
 					firstName += " ";
 				}
 				firstName += stringTokenizer.nextToken();
@@ -203,19 +211,20 @@ public class BookPanel extends JPanel {
 			int schlagwortid = getID("SELECT schlagwortid FROM schlagwort WHERE schlagwort='", word);
 			//INSERT IN TABLES
 			try {
-      db.disableAutoCommit();
-      db.executeChanges("INSERT INTO buch (isbn, preis, titel) VALUES ('" + isbn + ("', ") + price + (", '") + title + ("')"));
-			db.executeChanges("INSERT INTO hatgenre (buch, genre) VALUES ('" + isbn + ("', ") + genreid + (")"));
-			db.executeChanges("INSERT INTO geschriebenvon (buch, autoren) VALUES ('" + isbn + ("', ") + autorenid + (")"));
-			db.executeChanges("INSERT INTO veroeffentlichtvon (buch, verlag, datum) VALUES ('" + isbn + ("', " + verlagsid + (" , '") + date + ("')")));
-			db.executeChanges("INSERT INTO liegtin (buch, regal) VALUES ('" + isbn + ("', ") + regalid + (")"));
-			db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
-      db.commitTransaction();
-      db.enableAutoCommit();
-      } catch (Exception e) {
-        System.out.println("Fehler Transaktion"+e.toString());
-			//and update Table
-			updateAndAddTable();
+				db.disableAutoCommit();
+				db.executeChanges("INSERT INTO buch (isbn, preis, titel) VALUES ('" + isbn + ("', ") + price + (", '") + title + ("')"));
+				db.executeChanges("INSERT INTO hatgenre (buch, genre) VALUES ('" + isbn + ("', ") + genreid + (")"));
+				db.executeChanges("INSERT INTO geschriebenvon (buch, autoren) VALUES ('" + isbn + ("', ") + autorenid + (")"));
+				db.executeChanges("INSERT INTO veroeffentlichtvon (buch, verlag, datum) VALUES ('" + isbn + ("', " + verlagsid + (" , '") + date + ("')")));
+				db.executeChanges("INSERT INTO liegtin (buch, regal) VALUES ('" + isbn + ("', ") + regalid + (")"));
+				db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
+				db.commitTransaction();
+				db.enableAutoCommit();
+			} catch (Exception e) {
+				System.out.println("Fehler Transaktion" + e.toString());
+				//and update Table
+				updateAndAddTable();
+			}
 		}
 	}
 
@@ -236,11 +245,11 @@ public class BookPanel extends JPanel {
 			public void actionPerformed(ActionEvent actionEvent) {
 				String title = titleTextField.getText();
 				Float price = null;
-				if (!priceTextField.getText().equals("") && ! Input.isFloat(priceTextField.getText())) {
+				if (! priceTextField.getText().equals("") && ! Input.isFloat(priceTextField.getText())) {
 					JOptionPane jOptionPane = new JOptionPane();
 					JOptionPane.showMessageDialog(jOptionPane, "Tragen Sie einen gültigen Preis ein!", "Falsche Eingabe", JOptionPane.ERROR_MESSAGE);
 				} else {
-					if (!priceTextField.getText().equals("")) {
+					if (! priceTextField.getText().equals("")) {
 						price = Float.parseFloat(priceTextField.getText());
 					} else {
 						price = null;
@@ -248,11 +257,11 @@ public class BookPanel extends JPanel {
 					if (title == "" && price == 0) {
 						updateFrame.setVisible(false);
 					} else {
-						if (!title.equals("")) {
+						if (! title.equals("")) {
 							db.executeChanges("UPDATE buch SET titel='" + title + "' WHERE isbn='" + isbn + "'");
 							//alter title
 						}
-						if (!priceTextField.getText().equals("")) {
+						if (! priceTextField.getText().equals("")) {
 							db.executeChanges("UPDATE buch SET preis=" + price + " WHERE isbn='" + isbn + "'");
 							//alter price
 						}
@@ -261,8 +270,7 @@ public class BookPanel extends JPanel {
 					}
 				}
 			}
-		}
-		);
+		});
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			@Override

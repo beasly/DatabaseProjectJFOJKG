@@ -150,7 +150,7 @@ public class AuthorPanel extends JPanel {
 		ResultSet authorSet = db.executeSelect("Select * from autoren");
 		try {
 			while (authorSet.next()) {
-				if (authorSet.getString(2).equals(name) && authorSet.getString(1).equals(firstName)) {
+				if (authorSet.getString(3).equals(name) && authorSet.getString(2).equals(firstName)) {
 					validName = false;
 				}
 			}
