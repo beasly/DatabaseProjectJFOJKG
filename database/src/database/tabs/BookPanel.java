@@ -202,12 +202,15 @@ public class BookPanel extends JPanel {
 			int regalid = getID("SELECT regalid FROM regal WHERE ort='", shelf);
 			int schlagwortid = getID("SELECT schlagwortid FROM schlagwort WHERE schlagwort='", word);
 			//INSERT IN TABLES
-			db.executeChanges("INSERT INTO buch (isbn, preis, titel) VALUES ('" + isbn + ("', ") + price + (", '") + title + ("')"));
+			db.disableAutoCommit();
+      db.executeChanges("INSERT INTO buch (isbn, preis, titel) VALUES ('" + isbn + ("', ") + price + (", '") + title + ("')"));
 			db.executeChanges("INSERT INTO hatgenre (buch, genre) VALUES ('" + isbn + ("', ") + genreid + (")"));
 			db.executeChanges("INSERT INTO geschriebenvon (buch, autoren) VALUES ('" + isbn + ("', ") + autorenid + (")"));
 			db.executeChanges("INSERT INTO veroeffentlichtvon (buch, verlag, datum) VALUES ('" + isbn + ("', " + verlagsid + (" , '") + date + ("')")));
 			db.executeChanges("INSERT INTO liegtin (buch, regal) VALUES ('" + isbn + ("', ") + regalid + (")"));
 			db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
+      db.commitTransaction();
+      db.enableAutoCommit();
 			//and update Table
 			updateAndAddTable();
 		}
