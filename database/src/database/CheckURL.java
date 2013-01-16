@@ -114,6 +114,30 @@ public class CheckURL {
 		return resultList.toArray(new String[0]);
 	}
 
+  public void disableAutoCommit() {
+    try {
+      dbCon.setAutoCommit(false);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void enableAutoCommit() {
+    try {
+      dbCon.setAutoCommit(true);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void commitTransaction() {
+    try {
+      dbCon.commit();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
 
 
 }
