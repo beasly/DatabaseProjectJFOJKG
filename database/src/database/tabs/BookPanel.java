@@ -202,7 +202,8 @@ public class BookPanel extends JPanel {
 			int regalid = getID("SELECT regalid FROM regal WHERE ort='", shelf);
 			int schlagwortid = getID("SELECT schlagwortid FROM schlagwort WHERE schlagwort='", word);
 			//INSERT IN TABLES
-			db.disableAutoCommit();
+			try {
+      db.disableAutoCommit();
       db.executeChanges("INSERT INTO buch (isbn, preis, titel) VALUES ('" + isbn + ("', ") + price + (", '") + title + ("')"));
 			db.executeChanges("INSERT INTO hatgenre (buch, genre) VALUES ('" + isbn + ("', ") + genreid + (")"));
 			db.executeChanges("INSERT INTO geschriebenvon (buch, autoren) VALUES ('" + isbn + ("', ") + autorenid + (")"));
@@ -211,6 +212,8 @@ public class BookPanel extends JPanel {
 			db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
       db.commitTransaction();
       db.enableAutoCommit();
+      } catch (Exception e) {
+        System.out.println("Fehler Transaktion"+e.toString());
 			//and update Table
 			updateAndAddTable();
 		}
