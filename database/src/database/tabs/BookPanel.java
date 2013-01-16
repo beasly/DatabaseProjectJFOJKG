@@ -182,9 +182,16 @@ public class BookPanel extends JPanel {
 			int autorenid = 0;
 			StringTokenizer stringTokenizer = new StringTokenizer(author[0].toString());
 			String name = stringTokenizer.nextToken();
-			String vorname = stringTokenizer.nextToken();
+			String firstName = new String();
+			//because of more than one firstName
+			while(stringTokenizer.hasMoreTokens()){
+				if(!firstName.equals(new String())) {
+					firstName += " ";
+				}
+				firstName += stringTokenizer.nextToken();
+			}
 			name = name.substring(0, name.length() - 1);
-			ResultSet rs_autorenid = db.executeSelect("SELECT autorenid FROM autoren WHERE name='" + name + "' AND vorname='" + vorname + "'");
+			ResultSet rs_autorenid = db.executeSelect("SELECT autorenid FROM autoren WHERE name='" + name + "' AND vorname='" + firstName + "'");
 			try {
 				rs_autorenid.next();
 				autorenid = rs_autorenid.getInt("autorenid");
