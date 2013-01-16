@@ -108,7 +108,7 @@ public class WordPanel extends JPanel {
 				public void actionPerformed(ActionEvent actionEvent) {
 					String newWord = String.valueOf(wordTextField.getText());
 					if (!wordTextField.getText().equals("")) {
-						db.executeChanges("UPDATE regal SET ort='" + newWord + "' WHERE regalid='" + wordID + "'");
+						db.executeChanges("UPDATE schlagwort SET schlagwort='" + newWord + "' WHERE schlagwortid='" + wordID + "'");
 					}
 					updateFrame.setVisible(false);
 					updateAndAddTable();
