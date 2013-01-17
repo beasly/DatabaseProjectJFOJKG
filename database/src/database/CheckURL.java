@@ -3,6 +3,8 @@ package database;
 import java.sql.*;
 import java.util.LinkedList;
 
+import javax.swing.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: kevingoy
@@ -60,7 +62,9 @@ public class CheckURL {
     }
     catch(SQLException e) {
       e.printStackTrace();
-    }
+			JOptionPane jOptionPane = new JOptionPane();
+			JOptionPane.showMessageDialog(jOptionPane, "Es ist ein Fehler aufgetreten, bitte wechseln Sie den Tab und versuchen Sie es erneut.", "Fehler", JOptionPane.ERROR_MESSAGE);
+		}
     return result;
   }
 
@@ -81,7 +85,9 @@ public class CheckURL {
     }
     catch(SQLException e) {
       e.printStackTrace();
-      result = -1;
+			JOptionPane jOptionPane = new JOptionPane();
+			JOptionPane.showMessageDialog(jOptionPane, "Es ist ein Fehler aufgetreten, bitte wechseln Sie den Tab und versuchen Sie es erneut.", "Fehler", JOptionPane.ERROR_MESSAGE);
+			result = -1;
     }
     return result;
   }
@@ -135,7 +141,7 @@ public class CheckURL {
       dbCon.commit();
     } catch (SQLException e) {
       e.printStackTrace();
-    }
+		}
   }
 
 
