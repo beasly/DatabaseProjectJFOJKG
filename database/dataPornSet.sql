@@ -116,6 +116,37 @@ DO
 INSERT INTO buch_changelog (change_id, ISBN, preis_alt, preis_neu, titel_alt, titel_neu, mod_type) values
 													 (default, old.isbn, old.preis, old.preis, old.titel, 'N.A.', 'D');
 
+CREATE TABLE vanished_books (
+							vanished_id SERIAL,
+							ISBN varchar(14),
+							preis float(2),
+							titel varchar(100),
+							name varchar(100),
+							vorname varchar(100),
+							email varchar(100),
+							timestamp timestamp DEFAULT current_timestamp);
+
+CREATE OR REPLACE function deleteLostBooks()
+RETURNS VOID AS $$
+DECLARE
+	curs CURSOR IS select ausgeliehenan.buch, ausgeliehenan.ausleiher, ausgeliehenan.leihdatum, buch.preis, buch.titel, ausleiher.name, ausleiher.vorname, ausleiher.email from buch, ausleiher, ausgeliehenan where ausgeliehenan.buch = buch.isbn AND ausgeliehenan.ausleiher = ausleiher.ausleiherid AND ausleiher.ausleiherid != 3;
+	rec RECORD;
+BEGIN
+	OPEN curs;
+		LOOP
+			FETCH NEXT FROM CURS INTO REC;
+			IF NOT FOUND THEN EXIT;
+			END IF;
+
+			IF ( date_part('day', current_date::timestamp - rec.leihdatum::timestamp) > 365) THEN
+			INSERT into vanished_books values (default, rec.buch, rec.preis, rec.titel, rec.name, rec.vorname, rec.email);
+			Delete from buch where isbn = rec.buch;
+			END IF;
+		END LOOP;
+	CLOSE curs;
+	END;
+	$$ LANGUAGE 'plpgsql';
+
 
 
 
