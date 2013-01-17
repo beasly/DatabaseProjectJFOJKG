@@ -64,3 +64,14 @@ CREATE TABLE hatGenre(
 Buch varchar(14) references Buch(ISBN) on delete cascade,
 Genre integer references Genre(GenreID) on delete cascade,
 primary key(Buch, Genre));
+
+CREATE TABLE buch_changelog (
+							change_id SERIAL,
+							ISBN varchar(14),
+							preis_alt float(2),
+							preis_neu float(2),
+							titel_alt varchar(100),
+							titel_neu varchar(100),
+							mod_type char(1),
+							mod_user text DEFAULT CURRENT_USER,
+							mod_timestamp timestamp DEFAULT current_timestamp);

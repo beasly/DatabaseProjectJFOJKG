@@ -101,4 +101,21 @@ $$ LANGUAGE plpgsql;
 
 
 
+CREATE RULE buch_log_update AS ON update TO buch
+DO
+INSERT INTO buch_changelog (change_id, ISBN, preis_alt, preis_neu, titel_alt, titel_neu, mod_type) values
+													 (default, old.isbn, old.preis, new.preis, old.titel, new.titel, 'U');
+
+CREATE RULE buch_log_insert AS ON INSERT TO buch
+DO
+INSERT INTO buch_changelog (change_id, ISBN, preis_alt, preis_neu, titel_alt, titel_neu, mod_type) values
+													 (default, new.isbn, new.preis, new.preis, 'N.A.', new.titel, 'I');
+
+CREATE RULE buch_log_delete AS ON DELETE TO buch
+DO
+INSERT INTO buch_changelog (change_id, ISBN, preis_alt, preis_neu, titel_alt, titel_neu, mod_type) values
+													 (default, old.isbn, old.preis, old.preis, old.titel, 'N.A.', 'D');
+
+
+
 
