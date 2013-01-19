@@ -1,5 +1,8 @@
 package database.tabs;
 
+import database.CheckURL;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,10 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.swing.*;
-
-import database.CheckURL;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,7 +28,7 @@ public class GenrePanel extends JPanel {
 
 	public GenrePanel(CheckURL db) {
 		this.db = db;
-		setLayout(new GridLayout(2, 1));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		generateMetaBoxComponents();
 		updateAndAddTable();
 	}
@@ -88,7 +87,12 @@ public class GenrePanel extends JPanel {
 		metaBox.add(residenceTextField);
 		metaBox.add(new Label(""));
 		metaBox.add(okButton);
-		add(metaBox);
+
+    metaBox.setPreferredSize(new Dimension(800, 50));
+    metaBox.setMinimumSize(new Dimension(800, 50));
+    metaBox.setMaximumSize(new Dimension(800, 50));
+
+    add(metaBox);
 
 	}
 
@@ -99,7 +103,7 @@ public class GenrePanel extends JPanel {
 		updateFrame.setTitle("Genre aendern.");
 		updateFrame.setVisible(true);
 		updateFrame.setAlwaysOnTop(true);
-		updateFrame.setSize(400, 400);
+		updateFrame.setSize(400, 100);
 		JLabel genreLabel = new JLabel("Genre");
 		final JTextField genreTextField = new JTextField();
 		JButton okButton = new JButton("OK");

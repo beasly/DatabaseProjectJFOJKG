@@ -37,7 +37,7 @@ public class BookPanel extends JPanel {
 
 	public BookPanel(CheckURL db) {
 		this.db = db;
-		setLayout(new GridLayout(2, 1));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		generateMetaBoxComponents();
 		updateAndAddTable();
 	}
@@ -91,8 +91,10 @@ public class BookPanel extends JPanel {
 		});
 		remove(metaBox);
 		metaBox = new JPanel();
+
 		//layouting  and adding components
 		metaBox.setLayout(new GridLayout(0, 2));
+
 		metaBox.add(titleLabel);
 		metaBox.add(titleTextField);
 		metaBox.add(priceLabel);
@@ -114,7 +116,12 @@ public class BookPanel extends JPanel {
 		//empty label becaus of ugly layout
 		metaBox.add(new Label(""));
 		metaBox.add(okButton);
-		add(metaBox);
+
+    metaBox.setPreferredSize(new Dimension(800, 250));
+    metaBox.setMinimumSize(new Dimension(800, 250));
+    metaBox.setMaximumSize(new Dimension(800, 250));
+
+    add(metaBox);
 	}
 
 	public void updateAndAddTable() {
@@ -231,7 +238,7 @@ public class BookPanel extends JPanel {
 		updateFrame.setTitle("Buch aendern.");
 		updateFrame.setVisible(true);
 		updateFrame.setAlwaysOnTop(true);
-		updateFrame.setSize(400, 400);
+		updateFrame.setSize(400, 125);
 		JLabel titleLabel = new JLabel("Titel");
 		final JTextField titleTextField = new JTextField();
 		JLabel priceLabel = new JLabel("Preis");

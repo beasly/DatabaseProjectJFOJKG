@@ -1,5 +1,8 @@
 package database.tabs;
 
+import database.CheckURL;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,10 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.swing.*;
-
-import database.CheckURL;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,7 +29,7 @@ public class LenderPanel extends JPanel{
 
 	public LenderPanel(CheckURL db) {
 		this.db = db;
-		setLayout(new GridLayout(2, 1));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		generateMetaBoxComponents();
 		updateAndAddTable();
 
@@ -102,7 +101,12 @@ public class LenderPanel extends JPanel{
 		metaBox.add(mailTextField);
 		metaBox.add(new Label(""));
 		metaBox.add(okButton);
-		add(metaBox);
+
+    metaBox.setPreferredSize(new Dimension(800, 100));
+    metaBox.setMinimumSize(new Dimension(800, 100));
+    metaBox.setMaximumSize(new Dimension(800, 100));
+
+    add(metaBox);
 
 	}
 
@@ -121,7 +125,7 @@ public class LenderPanel extends JPanel{
 		updateFrame.setTitle("Autor aendern.");
 		updateFrame.setVisible(true);
 		updateFrame.setAlwaysOnTop(true);
-		updateFrame.setSize(400, 400);
+		updateFrame.setSize(400, 150);
 		JLabel nameLabel = new JLabel("Name");
 		final JTextField nameTextField = new JTextField();
 		JLabel firstNameLabel = new JLabel("Vorname");

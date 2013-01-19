@@ -1,5 +1,8 @@
 package database.tabs;
 
+import database.CheckURL;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,10 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.swing.*;
-
-import database.CheckURL;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,7 +28,7 @@ public class PublisherPanel extends JPanel{
 
 	public PublisherPanel(CheckURL db) {
 		this.db = db;
-		setLayout(new GridLayout(2, 1));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		generateMetaBoxComponents();
 		add(metaBox);
 		updateAndAddTable();
@@ -95,7 +94,12 @@ public class PublisherPanel extends JPanel{
 		metaBox.add(residenceTextField);
 		metaBox.add(new Label(""));
 		metaBox.add(okButton);
-		add(metaBox);
+
+    metaBox.setPreferredSize(new Dimension(800, 75));
+    metaBox.setMinimumSize(new Dimension(800, 75));
+    metaBox.setMaximumSize(new Dimension(800, 75));
+
+    add(metaBox);
 	}
 
 	private void makeUpdatePopUp() {
@@ -105,7 +109,7 @@ public class PublisherPanel extends JPanel{
 		updateFrame.setTitle("Verlag aendern.");
 		updateFrame.setVisible(true);
 		updateFrame.setAlwaysOnTop(true);
-		updateFrame.setSize(400, 400);
+		updateFrame.setSize(400, 125);
 		JLabel nameLabel = new JLabel("Name");
 		final JTextField nameTextField = new JTextField();
 		JLabel residenceLabel = new JLabel("Ort");
