@@ -182,6 +182,7 @@ public class HomePanel extends JPanel {
 				public void actionPerformed(ActionEvent actionEvent) {
 					Object[] lenderArray = lenderBox.getSelectedObjects();
 					int lenderid = 0;
+					Date lendDate = jDateChooser.getDate();
 					StringTokenizer stringTokenizer = new StringTokenizer(lenderArray[0].toString());
 					String name = stringTokenizer.nextToken();
 					String firstName = "";
@@ -200,7 +201,7 @@ public class HomePanel extends JPanel {
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-					db.executeChanges("UPDATE ausgeliehenAn SET Ausleiher=" + lenderid + " WHERE buch='" + finalIsbn + "'");
+					db.executeChanges("UPDATE ausgeliehenAn SET Ausleiher=" + lenderid + ", leihdatum='"+lendDate+"' WHERE buch='" + finalIsbn + "'");
 					lendFrame.setVisible(false);
 					updateAndAddTable();
 				}
