@@ -82,7 +82,7 @@ public class BookPanel extends JPanel {
 		String[] wordArray = db.resultSetToStringArray(wordResultSet, 1);
 		final JComboBox wordBox = new JComboBox(wordArray);
 
-		JButton okButton = new JButton("OK");
+		JButton okButton = new JButton("Hinzufügen");
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {

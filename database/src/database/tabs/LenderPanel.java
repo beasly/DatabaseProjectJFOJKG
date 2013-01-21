@@ -84,7 +84,7 @@ public class LenderPanel extends JPanel{
 		JLabel mailLabel = new JLabel("Email");
 		final JTextField mailTextField = new JTextField();
 
-		JButton okButton = new JButton("OK");
+		JButton okButton = new JButton("Hinzufügen");
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {

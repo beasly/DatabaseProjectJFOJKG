@@ -79,7 +79,7 @@ public class PublisherPanel extends JPanel{
 		final JLabel residenceLabel = new JLabel("Ort");
 		final JTextField residenceTextField = new JTextField();
 
-		JButton okButton = new JButton("OK");
+		JButton okButton = new JButton("Hinzufügen");
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {

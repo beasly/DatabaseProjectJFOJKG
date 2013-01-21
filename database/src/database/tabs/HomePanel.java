@@ -1,20 +1,22 @@
 package database.tabs;
 
+import com.toedter.calendar.JDateChooser;
+import database.CheckURL;
+
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.StringTokenizer;
-import com.toedter.calendar.JDateChooser;
-import database.CheckURL;
 
 public class HomePanel extends JPanel {
 
@@ -49,6 +51,8 @@ public class HomePanel extends JPanel {
 		homeTable.setRowSorter(sorter);
 		final JTextField filterText = new JTextField();
 		JButton button = new JButton("Filter");
+    JLabel filterLabel = new JLabel("Datebank durchsuchen");
+    JPanel filterGrid = new JPanel();
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -60,9 +64,17 @@ public class HomePanel extends JPanel {
 				}
 			}
 		});
-		metaBox.setLayout(new GridLayout(2, 1));
-		metaBox.add(filterText);
-		metaBox.add(button);
+    filterGrid.setLayout(new GridLayout(2,2));
+		metaBox.setLayout(new BoxLayout(metaBox, BoxLayout.Y_AXIS));
+    metaBox.setMaximumSize(new Dimension(800, 50));
+    metaBox.setPreferredSize(new Dimension(800, 50));
+    metaBox.setMinimumSize(new Dimension(800, 50));
+    filterText.setMaximumSize(new Dimension(800, 25));
+    filterGrid.add(filterLabel);
+    filterGrid.add(filterText);
+    filterGrid.add(new JLabel(""));
+    filterGrid.add(button);
+		metaBox.add(filterGrid);
 	}
 
 	public void updateAndAddTable() {
@@ -140,7 +152,7 @@ public class HomePanel extends JPanel {
 			receiveFrame.setTitle("Buch wiederbekommen.");
 			receiveFrame.setVisible(true);
 			receiveFrame.setAlwaysOnTop(true);
-			receiveFrame.setSize(400, 400);
+			receiveFrame.setSize(400, 125);
 			JLabel dateLabel = new JLabel("Datum");
 			Date date = GregorianCalendar.getInstance(Locale.GERMANY).getTime();
 			final JDateChooser jDateChooser = new JDateChooser();
@@ -203,7 +215,7 @@ public class HomePanel extends JPanel {
 			lendFrame.setTitle("Buch verleihen.");
 			lendFrame.setVisible(true);
 			lendFrame.setAlwaysOnTop(true);
-			lendFrame.setSize(400, 400);
+			lendFrame.setSize(400, 125);
 			JLabel lenderLabel = new JLabel("ausleihen an");
 			ResultSet lenderSet = db.executeSelect("Select name, vorname from Ausleiher");
 			String[] lenderArray = db.resultSetToStringArrayWithTwo(lenderSet, 1, 2);

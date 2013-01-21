@@ -66,7 +66,7 @@ public class AuthorPanel extends JPanel {
 		final JLabel firstNameLabel = new JLabel("Vorname");
 		final JTextField firstNameTextField = new JTextField();
 
-		JButton okButton = new JButton("OK");
+		JButton okButton = new JButton("Hinzufügen");
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
