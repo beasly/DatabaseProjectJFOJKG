@@ -1,6 +1,9 @@
 package database.tabs;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -10,7 +13,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.StringTokenizer;
-
 import com.toedter.calendar.JDateChooser;
 import database.CheckURL;
 
@@ -24,11 +26,43 @@ public class HomePanel extends JPanel {
 
 	private CheckURL db;
 
+	private JPanel metaBox = new JPanel();
+
+	private TableModel homeModel;
+
+	private TableRowSorter<TableModel> sorter;
+
+
+
 	public HomePanel(CheckURL db) {
 		this.db = db;
-		setLayout(new GridLayout(1, 1));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		updateAndAddTable();
+		generateMetaBox();
 
+
+	}
+
+	private void generateMetaBox() {
+		TableModel homeModel = homeTable.getModel();
+		final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(homeModel);
+		homeTable.setRowSorter(sorter);
+		final JTextField filterText = new JTextField();
+		JButton button = new JButton("Filter");
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				String text = filterText.getText();
+				if (text.length() == 0) {
+					sorter.setRowFilter(null);
+				} else {
+					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+				}
+			}
+		});
+		metaBox.setLayout(new GridLayout(2, 1));
+		metaBox.add(filterText);
+		metaBox.add(button);
 	}
 
 	public void updateAndAddTable() {
@@ -80,8 +114,13 @@ public class HomePanel extends JPanel {
 				getBookBack();
 			}
 		});
+		homeModel = homeTable.getModel();
+		sorter = new TableRowSorter<TableModel>(homeModel);
+		homeTable.setRowSorter(sorter);
+		remove(metaBox);
 		remove(homePane);
 		homePane = new JScrollPane(homeTable);
+		add(metaBox);
 		add(homePane);
 	}
 
@@ -146,7 +185,7 @@ public class HomePanel extends JPanel {
 
 		}
 
-		}
+	}
 
 	private void lendBook() {
 		String isbn = "";
@@ -182,6 +221,7 @@ public class HomePanel extends JPanel {
 				public void actionPerformed(ActionEvent actionEvent) {
 					Object[] lenderArray = lenderBox.getSelectedObjects();
 					int lenderid = 0;
+					Date lendDate = jDateChooser.getDate();
 					StringTokenizer stringTokenizer = new StringTokenizer(lenderArray[0].toString());
 					String name = stringTokenizer.nextToken();
 					String firstName = "";
@@ -200,7 +240,7 @@ public class HomePanel extends JPanel {
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-					db.executeChanges("UPDATE ausgeliehenAn SET Ausleiher=" + lenderid + " WHERE buch='" + finalIsbn + "'");
+					db.executeChanges("UPDATE ausgeliehenAn SET Ausleiher=" + lenderid + ", leihdatum='"+lendDate+"' WHERE buch='" + finalIsbn + "'");
 					lendFrame.setVisible(false);
 					updateAndAddTable();
 				}
