@@ -86,13 +86,31 @@ public class PublisherPanel extends JPanel{
 				getAllContentOfComponentsAndInsert(nameTextField, residenceTextField);
 			}
 		});
+		JButton deleteButton = new JButton("Verlag löschen");
+		deleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				try {
+					int publisherID = getID("Select verlagsid FROM verlag where name ='", String.valueOf(publisherTable.getValueAt(publisherTable.getSelectedRow(), 0)));
+					if (JOptionPane.showConfirmDialog(null, "Moechten Sie den Verlag wirklich loeschen?", "Verlag loeschen", JOptionPane.YES_NO_CANCEL_OPTION) == 0) {
+						if (db.executeChanges("Delete From Verlag where verlagsid = '" + publisherID + "'") == 0) {
+							JOptionPane.showMessageDialog(null, "Der Verlag kann nicht geloescht werden, da der Verlag noch auf Buecher referenziert.");
+						}
+						updateAndAddTable();
+					}
+				} catch (IndexOutOfBoundsException e) {
+					JOptionPane.showMessageDialog(null, "Bitte waehlen Sie einen Datensatz.");
+				}
+			}
+		});
+
 		metaBox.setLayout(new GridLayout(0, 2));
 
 		metaBox.add(nameLabel);
 		metaBox.add(nameTextField);
 		metaBox.add(residenceLabel);
 		metaBox.add(residenceTextField);
-		metaBox.add(new Label(""));
+		metaBox.add(deleteButton);
 		metaBox.add(okButton);
 
     metaBox.setPreferredSize(new Dimension(800, 75));

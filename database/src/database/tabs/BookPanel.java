@@ -89,6 +89,22 @@ public class BookPanel extends JPanel {
 				getAllContentOfComponentsAndInsert(titleTextField, isbnTextField, priceTextField, genreBox, authorBox, publisherBox, shelfBox, jDateChooser, wordBox, db);
 			}
 		});
+		JButton deleteButton = new JButton("Buch löschen");
+		deleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				String isbn = null;
+				try {
+					isbn = String.valueOf(bookTable.getValueAt(bookTable.getSelectedRow(), 0));
+					if (JOptionPane.showConfirmDialog(null, "Moechten Sie das Buch wirklich loeschen?", "Buch loeschen", JOptionPane.YES_NO_CANCEL_OPTION) == 0) {
+						db.executeChanges("Delete From buch where isbn='" + isbn + "'");
+						updateAndAddTable();
+					}
+				} catch (IndexOutOfBoundsException e) {
+					JOptionPane.showMessageDialog(null, "Bitte waehlen Sie einen Datensatz.");
+				}
+			}
+		});
 		remove(metaBox);
 		metaBox = new JPanel();
 
@@ -113,15 +129,14 @@ public class BookPanel extends JPanel {
 		metaBox.add(jDateChooser);
 		metaBox.add(wordLabel);
 		metaBox.add(wordBox);
-		//empty label becaus of ugly layout
-		metaBox.add(new Label(""));
+		metaBox.add(deleteButton);
 		metaBox.add(okButton);
 
-    metaBox.setPreferredSize(new Dimension(800, 250));
-    metaBox.setMinimumSize(new Dimension(800, 250));
-    metaBox.setMaximumSize(new Dimension(800, 250));
+		metaBox.setPreferredSize(new Dimension(800, 250));
+		metaBox.setMinimumSize(new Dimension(800, 250));
+		metaBox.setMaximumSize(new Dimension(800, 250));
 
-    add(metaBox);
+		add(metaBox);
 	}
 
 	public void updateAndAddTable() {
@@ -217,17 +232,17 @@ public class BookPanel extends JPanel {
 			int regalid = getID("SELECT regalid FROM regal WHERE ort='", shelf);
 			int schlagwortid = getID("SELECT schlagwortid FROM schlagwort WHERE schlagwort='", word);
 			//INSERT IN TABLES
-				db.disableAutoCommit();
-				db.executeChanges("INSERT INTO buch (isbn, preis, titel) VALUES ('" + isbn + ("', ") + price + (", '") + title + ("')"));
-				db.executeChanges("INSERT INTO hatgenre (buch, genre) VALUES ('" + isbn + ("', ") + genreid + (")"));
-				db.executeChanges("INSERT INTO geschriebenvon (buch, autoren) VALUES ('" + isbn + ("', ") + autorenid + (")"));
-				db.executeChanges("INSERT INTO veroeffentlichtvon (buch, verlag, datum) VALUES ('" + isbn + ("', " + verlagsid + (" , '") + date + ("')")));
-				db.executeChanges("INSERT INTO liegtin (buch, regal) VALUES ('" + isbn + ("', ") + regalid + (")"));
-				db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
-				db.commitTransaction();
-				db.enableAutoCommit();
-				//and update Table
-				updateAndAddTable();
+			db.disableAutoCommit();
+			db.executeChanges("INSERT INTO buch (isbn, preis, titel) VALUES ('" + isbn + ("', ") + price + (", '") + title + ("')"));
+			db.executeChanges("INSERT INTO hatgenre (buch, genre) VALUES ('" + isbn + ("', ") + genreid + (")"));
+			db.executeChanges("INSERT INTO geschriebenvon (buch, autoren) VALUES ('" + isbn + ("', ") + autorenid + (")"));
+			db.executeChanges("INSERT INTO veroeffentlichtvon (buch, verlag, datum) VALUES ('" + isbn + ("', " + verlagsid + (" , '") + date + ("')")));
+			db.executeChanges("INSERT INTO liegtin (buch, regal) VALUES ('" + isbn + ("', ") + regalid + (")"));
+			db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
+			db.commitTransaction();
+			db.enableAutoCommit();
+			//and update Table
+			updateAndAddTable();
 
 		}
 	}
@@ -262,7 +277,7 @@ public class BookPanel extends JPanel {
 						updateFrame.setVisible(false);
 					} else {
 						db.disableAutoCommit();
-            if (! title.equals("")) {
+						if (! title.equals("")) {
 							db.executeChanges("UPDATE buch SET titel='" + title + "' WHERE isbn='" + isbn + "'");
 							//alter title
 						}
@@ -270,8 +285,8 @@ public class BookPanel extends JPanel {
 							db.executeChanges("UPDATE buch SET preis=" + price + " WHERE isbn='" + isbn + "'");
 							//alter price
 						}
-            db.commitTransaction();
-            db.enableAutoCommit();
+						db.commitTransaction();
+						db.enableAutoCommit();
 						updateFrame.setVisible(false);
 						updateAndAddTable();
 					}

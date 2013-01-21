@@ -82,10 +82,28 @@ public class GenrePanel extends JPanel {
 				getAllContentOfComponentsAndInsert(residenceTextField);
 			}
 		});
+		JButton deleteButton = new JButton("Genre löschen");
+		deleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				try {
+					int genreid = getID("Select genreid FROM genre where genre ='", String.valueOf(genreTable.getValueAt(genreTable.getSelectedRow(), 0)));
+					if (JOptionPane.showConfirmDialog(null, "Moechten Sie das Genre wirklich loeschen?", "Genre loeschen", JOptionPane.YES_NO_CANCEL_OPTION) == 0) {
+						if (db.executeChanges("Delete From Genre where genreid = '" + genreid + "'") == 0) {
+							JOptionPane.showMessageDialog(null, "Das Genre kann nicht geloescht werden, da das Genre noch auf Buecher referenziert.");
+						}
+						updateAndAddTable();
+					}
+				} catch (IndexOutOfBoundsException e) {
+					JOptionPane.showMessageDialog(null, "Bitte waehlen Sie einen Datensatz.");
+				}
+			}
+		});
+
 		metaBox.setLayout(new GridLayout(0, 2));
 		metaBox.add(residenceLabel);
 		metaBox.add(residenceTextField);
-		metaBox.add(new Label(""));
+		metaBox.add(deleteButton);
 		metaBox.add(okButton);
 
     metaBox.setPreferredSize(new Dimension(800, 50));

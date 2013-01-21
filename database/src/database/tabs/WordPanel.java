@@ -82,10 +82,28 @@ public class WordPanel extends JPanel {
 					getAllContentOfComponentsAndInsert(residenceTextField);
 				}
 			});
+			JButton deleteButton = new JButton("Schlagwort löschen");
+			deleteButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent actionEvent) {
+					try {
+						int wordID = getID("Select schlagwortid FROM schlagwort where schlagwort ='", String.valueOf(wordTable.getValueAt(wordTable.getSelectedRow(), 0)));
+						if (JOptionPane.showConfirmDialog(null, "Moechten Sie das Schlagwort wirklich loeschen?", "Schlagwort loeschen", JOptionPane.YES_NO_CANCEL_OPTION) == 0) {
+							if (db.executeChanges("Delete From Schlagwort where Schlagwortid = '" + wordID + "'") == 0) {
+								JOptionPane.showMessageDialog(null, "Das Schlagwort kann nicht geloescht werden, da das Schlagwort noch auf Buecher referenziert.");
+							}
+							updateAndAddTable();
+						}
+					} catch (IndexOutOfBoundsException e) {
+						JOptionPane.showMessageDialog(null, "Bitte waehlen Sie einen Datensatz.");
+					}
+				}
+			});
+
 			metaBox.setLayout(new GridLayout(0, 2));
 			metaBox.add(residenceLabel);
 			metaBox.add(residenceTextField);
-			metaBox.add(new Label(""));
+			metaBox.add(deleteButton);
 			metaBox.add(okButton);
 
       metaBox.setPreferredSize(new Dimension(800, 50));

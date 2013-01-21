@@ -78,10 +78,27 @@ public class ShelfPanel extends JPanel {
 				getAllContentOfComponentsAndInsert(residenceTextField);
 			}
 		});
+		JButton deleteButton = new JButton("Regal löschen");
+		deleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				try {
+					int shelfID = getID("Select regalid FROM regal where ort ='", String.valueOf(shelfTable.getValueAt(shelfTable.getSelectedRow(), 0)));					if (JOptionPane.showConfirmDialog(null, "Moechten Sie den Verlag wirklich loeschen?", "Verlag loeschen", JOptionPane.YES_NO_CANCEL_OPTION) == 0) {
+						if (db.executeChanges("Delete From Regal where regalid = '" + shelfID + "'") == 0) {
+							JOptionPane.showMessageDialog(null, "Das Regal kann nicht geloescht werden, da in dem Regal noch Buecher stehen.");
+						}
+						updateAndAddTable();
+					}
+				} catch (IndexOutOfBoundsException e) {
+					JOptionPane.showMessageDialog(null, "Bitte waehlen Sie einen Datensatz.");
+				}
+			}
+		});
+
 		metaBox.setLayout(new GridLayout(0, 2));
 		metaBox.add(residenceLabel);
 		metaBox.add(residenceTextField);
-		metaBox.add(new Label(""));
+		metaBox.add(deleteButton);
 		metaBox.add(okButton);
 
     metaBox.setPreferredSize(new Dimension(800, 50));

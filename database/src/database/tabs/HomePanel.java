@@ -30,51 +30,10 @@ public class HomePanel extends JPanel {
 
 	private JPanel metaBox = new JPanel();
 
-	private TableModel homeModel;
-
-	private TableRowSorter<TableModel> sorter;
-
-
-
 	public HomePanel(CheckURL db) {
 		this.db = db;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		updateAndAddTable();
-		generateMetaBox();
-
-
-	}
-
-	private void generateMetaBox() {
-		TableModel homeModel = homeTable.getModel();
-		final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(homeModel);
-		homeTable.setRowSorter(sorter);
-		final JTextField filterText = new JTextField();
-		JButton button = new JButton("Filter");
-    JLabel filterLabel = new JLabel("Datebank durchsuchen");
-    JPanel filterGrid = new JPanel();
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				String text = filterText.getText();
-				if (text.length() == 0) {
-					sorter.setRowFilter(null);
-				} else {
-					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
-				}
-			}
-		});
-    filterGrid.setLayout(new GridLayout(2,2));
-		metaBox.setLayout(new BoxLayout(metaBox, BoxLayout.Y_AXIS));
-    metaBox.setMaximumSize(new Dimension(800, 50));
-    metaBox.setPreferredSize(new Dimension(800, 50));
-    metaBox.setMinimumSize(new Dimension(800, 50));
-    filterText.setMaximumSize(new Dimension(800, 25));
-    filterGrid.add(filterLabel);
-    filterGrid.add(filterText);
-    filterGrid.add(new JLabel(""));
-    filterGrid.add(button);
-		metaBox.add(filterGrid);
 	}
 
 	public void updateAndAddTable() {
@@ -126,10 +85,37 @@ public class HomePanel extends JPanel {
 				getBookBack();
 			}
 		});
-		homeModel = homeTable.getModel();
-		sorter = new TableRowSorter<TableModel>(homeModel);
+		TableModel homeModel = homeTable.getModel();
+		final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(homeModel);
 		homeTable.setRowSorter(sorter);
+		final JTextField filterText = new JTextField();
+		JButton button = new JButton("Filter");
+		JLabel filterLabel = new JLabel("Datenbank durchsuchen");
+		JPanel filterGrid = new JPanel();
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				String text = filterText.getText();
+				if (text.length() == 0) {
+					sorter.setRowFilter(null);
+				} else {
+					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+				}
+			}
+		});
 		remove(metaBox);
+		metaBox = new JPanel();
+		filterGrid.setLayout(new GridLayout(2,2));
+		metaBox.setLayout(new BoxLayout(metaBox, BoxLayout.Y_AXIS));
+		metaBox.setMaximumSize(new Dimension(800, 50));
+		metaBox.setPreferredSize(new Dimension(800, 50));
+		metaBox.setMinimumSize(new Dimension(800, 50));
+		filterText.setMaximumSize(new Dimension(800, 25));
+		filterGrid.add(filterLabel);
+		filterGrid.add(filterText);
+		filterGrid.add(new JLabel(""));
+		filterGrid.add(button);
+		metaBox.add(filterGrid);
 		remove(homePane);
 		homePane = new JScrollPane(homeTable);
 		add(metaBox);
@@ -217,7 +203,7 @@ public class HomePanel extends JPanel {
 			lendFrame.setAlwaysOnTop(true);
 			lendFrame.setSize(400, 125);
 			JLabel lenderLabel = new JLabel("ausleihen an");
-			ResultSet lenderSet = db.executeSelect("Select name, vorname from Ausleiher");
+			ResultSet lenderSet = db.executeSelect("Select name, vorname from Ausleiher where ausleiherid != 3");
 			String[] lenderArray = db.resultSetToStringArrayWithTwo(lenderSet, 1, 2);
 			final JComboBox lenderBox = new JComboBox(lenderArray);
 			JLabel dateLabel = new JLabel("Datum");

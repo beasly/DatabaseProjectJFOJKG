@@ -4,6 +4,7 @@ package database.tabs;
 import database.CheckURL;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,9 +30,9 @@ public class AuthorPanel extends JPanel {
 
 	}
 
-	public void updateAndAddTable() 	{
+	public void updateAndAddTable() {
 		ResultSet authorSet = db.executeSelect("Select * from autoren");
-		authorTable = new JTable(getTableContent(authorSet, authorTableHeader.length), authorTableHeader){
+		authorTable = new JTable(getTableContent(authorSet, authorTableHeader.length), authorTableHeader) {
 			public boolean isCellEditable(int rowIndex, int colIndex) {
 				return false;   //Disallow the editing of any cell
 			}
@@ -44,14 +45,22 @@ public class AuthorPanel extends JPanel {
 					makeUpdatePopUp();
 				}
 			}
+
 			@Override
-			public void mousePressed(MouseEvent mouseEvent) {}
+			public void mousePressed(MouseEvent mouseEvent) {
+			}
+
 			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {}
+			public void mouseReleased(MouseEvent mouseEvent) {
+			}
+
 			@Override
-			public void mouseEntered(MouseEvent mouseEvent) {}
+			public void mouseEntered(MouseEvent mouseEvent) {
+			}
+
 			@Override
-			public void mouseExited(MouseEvent mouseEvent) {}
+			public void mouseExited(MouseEvent mouseEvent) {
+			}
 		});
 		remove(scrollPane);
 		scrollPane = new JScrollPane(authorTable);
@@ -73,20 +82,48 @@ public class AuthorPanel extends JPanel {
 				getAllContentOfComponentsAndInsert(nameTextField, firstNameTextField);
 			}
 		});
+		JButton deleteButton = new JButton("Autor löschen");
+		deleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				String isbn = null;
+				try {
+					int autorenID = 0;
+					final String name = String.valueOf(authorTable.getValueAt(authorTable.getSelectedRow(), 0));
+					final String firstName = String.valueOf(authorTable.getValueAt(authorTable.getSelectedRow(), 1));
+					ResultSet rs_autorenid = db.executeSelect("SELECT autorenid FROM autoren WHERE name='" + name + "' AND vorname='" + firstName + "'");
+					try {
+						rs_autorenid.next();
+						autorenID = rs_autorenid.getInt("autorenid");
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					if (JOptionPane.showConfirmDialog(null, "Moechten Sie den Autor wirklich loeschen?", "Autor loeschen", JOptionPane.YES_NO_CANCEL_OPTION) == 0) {
+						if(db.executeChanges("Delete From Autoren where autorenid = '"+autorenID+"'")==0){
+							JOptionPane.showMessageDialog(null, "Der Autor kann nicht geloescht werden, da der Autor noch auf Buecher referenziert.");
+						}
+						updateAndAddTable();
+					}
+				} catch (IndexOutOfBoundsException e) {
+					JOptionPane.showMessageDialog(null, "Bitte waehlen Sie einen Datensatz.");
+				}
+			}
+		});
+
 		metaBox.setLayout(new GridLayout(0, 2));
 
 		metaBox.add(nameLabel);
 		metaBox.add(nameTextField);
 		metaBox.add(firstNameLabel);
 		metaBox.add(firstNameTextField);
-		metaBox.add(new Label(""));
+		metaBox.add(deleteButton);
 		metaBox.add(okButton);
 
-    metaBox.setPreferredSize(new Dimension(800, 75));
-    metaBox.setMinimumSize(new Dimension(800, 75));
-    metaBox.setMaximumSize(new Dimension(800, 75));
+		metaBox.setPreferredSize(new Dimension(800, 75));
+		metaBox.setMinimumSize(new Dimension(800, 75));
+		metaBox.setMaximumSize(new Dimension(800, 75));
 
-    add(metaBox);
+		add(metaBox);
 
 	}
 
@@ -117,11 +154,11 @@ public class AuthorPanel extends JPanel {
 			public void actionPerformed(ActionEvent actionEvent) {
 				String newName = String.valueOf(nameTextField.getText());
 				String newFirstName = String.valueOf(firstNameTextField.getText());
-				if (!nameTextField.getText().equals("") || !firstNameTextField.getText().equals("")) {
-					if(!nameTextField.getText().equals("")){
+				if (! nameTextField.getText().equals("") || ! firstNameTextField.getText().equals("")) {
+					if (! nameTextField.getText().equals("")) {
 						db.executeChanges("UPDATE autoren SET name='" + newName + "' WHERE autorenid='" + finalAutorenID + "'");
 					}
-					if (!firstNameTextField.getText().equals("")) {
+					if (! firstNameTextField.getText().equals("")) {
 						db.executeChanges("UPDATE autoren SET vorname='" + newFirstName + "' WHERE autorenid='" + finalAutorenID + "'");
 					}
 					updateFrame.setVisible(false);
@@ -161,7 +198,7 @@ public class AuthorPanel extends JPanel {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (validName && !name.equals("") && !firstName.equals("")) {
+		if (validName && ! name.equals("") && ! firstName.equals("")) {
 			db.executeChanges("INSERT INTO autoren Values(DEFAULT,'" + name + "','" + firstName + "')");
 			updateAndAddTable();
 		} else {

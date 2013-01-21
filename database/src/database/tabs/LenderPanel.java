@@ -37,7 +37,7 @@ public class LenderPanel extends JPanel{
 	}
 
 	public void updateAndAddTable() 	{
-		ResultSet authorSet = db.executeSelect("Select * from ausleiher");
+		ResultSet authorSet = db.executeSelect("Select * from ausleiher where ausleiherid != 3");
 		lenderTable = new JTable(getTableContent(authorSet, lenderTableHeader.length), lenderTableHeader){
 			public boolean isCellEditable(int rowIndex, int colIndex) {
 				return false;   //Disallow the editing of any cell
@@ -91,6 +91,33 @@ public class LenderPanel extends JPanel{
 				getAllContentOfComponentsAndInsert(nameTextField, firstNameTextField, mailTextField);
 			}
 		});
+		JButton deleteButton = new JButton("Ausleiher löschen");
+		deleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				try {
+					int lenderID = 0;
+					final String name = String.valueOf(lenderTable.getValueAt(lenderTable.getSelectedRow(), 0));
+					final String firstName = String.valueOf(lenderTable.getValueAt(lenderTable.getSelectedRow(), 1));
+					ResultSet rs_lenderid = db.executeSelect("SELECT Ausleiherid FROM ausleiher WHERE name='" + name + "' AND vorname='" + firstName + "'");
+					try {
+						rs_lenderid.next();
+						lenderID = rs_lenderid.getInt("ausleiherid");
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					if (JOptionPane.showConfirmDialog(null, "Moechten Sie den Ausleiher wirklich loeschen?", "Ausleiher loeschen", JOptionPane.YES_NO_CANCEL_OPTION) == 0) {
+						if (db.executeChanges("Delete From Ausleiher where ausleiherid = '" + lenderID + "'") == 0) {
+							JOptionPane.showMessageDialog(null, "Der Ausleiher kann nicht geloescht werden, da er noch Buecher besitzt.");
+						}
+						updateAndAddTable();
+					}
+				} catch (IndexOutOfBoundsException e) {
+					JOptionPane.showMessageDialog(null, "Bitte waehlen Sie einen Datensatz.");
+				}
+			}
+		});
+
 		metaBox.setLayout(new GridLayout(0, 2));
 
 		metaBox.add(nameLabel);
@@ -99,7 +126,7 @@ public class LenderPanel extends JPanel{
 		metaBox.add(firstNameTextField);
 		metaBox.add(mailLabel);
 		metaBox.add(mailTextField);
-		metaBox.add(new Label(""));
+		metaBox.add(deleteButton);
 		metaBox.add(okButton);
 
     metaBox.setPreferredSize(new Dimension(800, 100));

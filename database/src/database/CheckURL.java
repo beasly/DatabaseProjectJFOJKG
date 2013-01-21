@@ -80,7 +80,7 @@ public class CheckURL {
     int result = 0;
     try {
       Statement stm = dbCon.createStatement();
-      boolean st = stm.execute(sql);
+      stm.execute(sql);
       result = stm.getUpdateCount();
     }
     catch(SQLException e) {
