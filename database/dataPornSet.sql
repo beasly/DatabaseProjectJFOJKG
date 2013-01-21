@@ -24,11 +24,11 @@ INSERT INTO Verlag VALUES (DEFAULT,'OReilly', 'Koeln');
 INSERT INTO Verlag VALUES (DEFAULT, 'Deutscher Taschenbuch Verlag', 'Berlin');
 INSERT INTO Verlag VALUES (DEFAULT, 'Spektrum Akademischer Verlag', 'Heidelberg');
 
-INSERT INTO veroeffentlichtvon VALUES ('978-3897211971',1,'01/01/01');
-INSERT INTO veroeffentlichtvon VALUES ('978-3897213326',1,'01/01/01');
-INSERT INTO veroeffentlichtvon VALUES ('978-0596006976',1,'01/01/01');
-INSERT INTO veroeffentlichtvon VALUES ('978-3423214124',2,'01/10/01');
-INSERT INTO veroeffentlichtvon VALUES ('978-3827418241',3,'01/05/08');
+INSERT INTO veroeffentlichtvon VALUES ('978-3897211971',1);
+INSERT INTO veroeffentlichtvon VALUES ('978-3897213326',1);
+INSERT INTO veroeffentlichtvon VALUES ('978-0596006976',1);
+INSERT INTO veroeffentlichtvon VALUES ('978-3423214124',2);
+INSERT INTO veroeffentlichtvon VALUES ('978-3827418241',3);
 
 INSERT INTO Regal VALUES (DEFAULT, 'WohnzimmerLinks');
 INSERT INTO Regal VALUES (DEFAULT, 'WohnzimmerRechts');
@@ -116,15 +116,6 @@ DO
 INSERT INTO buch_changelog (change_id, ISBN, preis_alt, preis_neu, titel_alt, titel_neu, mod_type) values
 													 (default, old.isbn, old.preis, old.preis, old.titel, 'N.A.', 'D');
 
-CREATE TABLE vanished_books (
-							vanished_id SERIAL,
-							ISBN varchar(14),
-							preis float(2),
-							titel varchar(100),
-							name varchar(100),
-							vorname varchar(100),
-							email varchar(100),
-							timestamp timestamp DEFAULT current_timestamp);
 
 CREATE OR REPLACE function deleteLostBooks()
 RETURNS VOID AS $$
@@ -148,5 +139,20 @@ BEGIN
 	$$ LANGUAGE 'plpgsql';
 
 
+
+CREATE OR REPLACE function deleteInactiveLender()
+RETURNS VOID AS $$
+DECLARE
+    lender INTEGER;
+BEGIN
+    FOR lender IN SELECT ausleiherid FROM ausleiher
+   LOOP
+        IF lender NOT IN (SELECT ausleiher FROM ausgeliehenan) THEN
+            DELETE FROM ausleiher WHERE lender = ausleiherid;
+        END IF;
+   END LOOP;
+
+END;
+$$ LANGUAGE 'plpgsql';
 
 

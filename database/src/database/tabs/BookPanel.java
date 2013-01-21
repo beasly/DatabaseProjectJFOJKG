@@ -70,13 +70,6 @@ public class BookPanel extends JPanel {
 		String[] shelfArray = db.resultSetToStringArray(shelfResultSet, 1);
 		final JComboBox shelfBox = new JComboBox(shelfArray);
 
-		JLabel dateLabel = new JLabel("Datum");
-		Date date = GregorianCalendar.getInstance(Locale.GERMANY).getTime();
-		final JDateChooser jDateChooser = new JDateChooser();
-		jDateChooser.setDateFormatString("dd/MM/yyyy");
-		jDateChooser.setDate(date);
-		((JTextField) jDateChooser.getDateEditor()).setEditable(false);
-
 		JLabel wordLabel = new JLabel("Schlagwort");
 		ResultSet wordResultSet = db.executeSelect("Select Schlagwort from Schlagwort;");
 		String[] wordArray = db.resultSetToStringArray(wordResultSet, 1);
@@ -86,7 +79,7 @@ public class BookPanel extends JPanel {
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				getAllContentOfComponentsAndInsert(titleTextField, isbnTextField, priceTextField, genreBox, authorBox, publisherBox, shelfBox, jDateChooser, wordBox, db);
+				getAllContentOfComponentsAndInsert(titleTextField, isbnTextField, priceTextField, genreBox, authorBox, publisherBox, shelfBox, wordBox, db);
 			}
 		});
 		JButton deleteButton = new JButton("Buch löschen");
@@ -125,8 +118,6 @@ public class BookPanel extends JPanel {
 		metaBox.add(publisherBox);
 		metaBox.add(shelfLabel);
 		metaBox.add(shelfBox);
-		metaBox.add(dateLabel);
-		metaBox.add(jDateChooser);
 		metaBox.add(wordLabel);
 		metaBox.add(wordBox);
 		metaBox.add(deleteButton);
@@ -176,7 +167,7 @@ public class BookPanel extends JPanel {
 		add(scrollPane);
 	}
 
-	private void getAllContentOfComponentsAndInsert(JTextField titleTextField, JTextField isbnTextField, JTextField priceTextField, JComboBox genreBox, JComboBox authorBox, JComboBox publisherBox, JComboBox shelfBox, JDateChooser jDateChooser, JComboBox wordBox, CheckURL db) {
+	private void getAllContentOfComponentsAndInsert(JTextField titleTextField, JTextField isbnTextField, JTextField priceTextField, JComboBox genreBox, JComboBox authorBox, JComboBox publisherBox, JComboBox shelfBox, JComboBox wordBox, CheckURL db) {
 		String title = titleTextField.getText();
 		//ISBN ueber die regulaeren Ausdruck pruefen---> Jufi Methode
 		String isbn = isbnTextField.getText();
@@ -205,7 +196,6 @@ public class BookPanel extends JPanel {
 			Object[] author = authorBox.getSelectedObjects();
 			String publisher = (String) publisherBox.getSelectedItem();
 			String shelf = (String) shelfBox.getSelectedItem();
-			Date date = jDateChooser.getDate();
 			String word = (String) wordBox.getSelectedItem();
 			//get all ID's
 			int genreid = getID("SELECT genreid FROM genre WHERE genre ='", genre);
@@ -236,7 +226,7 @@ public class BookPanel extends JPanel {
 			db.executeChanges("INSERT INTO buch (isbn, preis, titel) VALUES ('" + isbn + ("', ") + price + (", '") + title + ("')"));
 			db.executeChanges("INSERT INTO hatgenre (buch, genre) VALUES ('" + isbn + ("', ") + genreid + (")"));
 			db.executeChanges("INSERT INTO geschriebenvon (buch, autoren) VALUES ('" + isbn + ("', ") + autorenid + (")"));
-			db.executeChanges("INSERT INTO veroeffentlichtvon (buch, verlag, datum) VALUES ('" + isbn + ("', " + verlagsid + (" , '") + date + ("')")));
+			db.executeChanges("INSERT INTO veroeffentlichtvon (buch, verlag) VALUES ('" + isbn + "', " + verlagsid + ")");
 			db.executeChanges("INSERT INTO liegtin (buch, regal) VALUES ('" + isbn + ("', ") + regalid + (")"));
 			db.executeChanges("INSERT INTO hatschlagwort (buch, schlagwort) VALUES ('" + isbn + ("', ") + schlagwortid + (")"));
 			db.commitTransaction();

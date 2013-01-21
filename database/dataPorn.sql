@@ -1,4 +1,3 @@
-
 CREATE TABLE Buch(
 ISBN varchar(14) not null primary key,
 Preis float(2),
@@ -35,7 +34,6 @@ Genre varchar(30) not null);
 CREATE TABLE veroeffentlichtVon(
 Buch varchar(14) references Buch(ISBN) on delete cascade,
 Verlag integer references Verlag(VerlagsID) on delete cascade,
-Datum Date,
 primary key(Buch, Verlag));
 
 CREATE TABLE ausgeliehenAn(
@@ -66,7 +64,7 @@ Genre integer references Genre(GenreID) on delete cascade,
 primary key(Buch, Genre));
 
 CREATE TABLE buch_changelog (
-							change_id SERIAL,
+							change_id SERIAL primary key,
 							ISBN varchar(14),
 							preis_alt float(2),
 							preis_neu float(2),
@@ -75,3 +73,13 @@ CREATE TABLE buch_changelog (
 							mod_type char(1),
 							mod_user text DEFAULT CURRENT_USER,
 							mod_timestamp timestamp DEFAULT current_timestamp);
+							
+CREATE TABLE vanished_books (
+							vanished_id SERIAL primary key,
+							ISBN varchar(14),
+							preis float(2),
+							titel varchar(100),
+							name varchar(100),
+							vorname varchar(100),
+							email varchar(100),
+							timestamp timestamp DEFAULT current_timestamp);
