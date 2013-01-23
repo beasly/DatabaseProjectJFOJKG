@@ -11,6 +11,7 @@ import java.text.ParseException;
  * The main class of our database application.
  * It is an application to organize your bookcollection.
  *
+ * @version RC 1.0
  * @author Julian Fink, Oskar Jung, Kevin Goy
  */
 public class DataBaseApplication extends JFrame{
