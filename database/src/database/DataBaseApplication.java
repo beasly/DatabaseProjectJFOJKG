@@ -8,8 +8,10 @@ import java.awt.event.WindowListener;
 import java.text.ParseException;
 
 /**
- * Main Class.
- * User: Julian Fink, Oskar Jung, Kevin Goy
+ * The main class of our database application.
+ * It is an application to organize your bookcollection.
+ *
+ * @author Julian Fink, Oskar Jung, Kevin Goy
  */
 public class DataBaseApplication extends JFrame{
 

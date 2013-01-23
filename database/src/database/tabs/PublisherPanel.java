@@ -12,20 +12,40 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: kevingoy
- * Date: 14.01.13
- * Time: 14:19
- * To change this template use File | Settings | File Templates.
+ * The Panel is a tabbedpanel of the main programm. It consists of a metabox,
+ * where you can insert a publisher in the database, and a table with an overview
+ * over the table verlag from the database.
+ *
+ * @version RC 1.0
  */
+
 public class PublisherPanel extends JPanel{
 
+	/**
+	 * the metabox to add a new publisher
+	 */
 	private JPanel metaBox = new JPanel();
+	/**
+	 * the table with an overview of all publishers
+	 */
 	private JTable publisherTable;
+	/**
+	 * the scrollpane to make the table scrollable
+	 */
 	private JScrollPane scrollPane = new JScrollPane(publisherTable);
+	/**
+	 * the array with the the strings for the tableheader
+	 */
 	private String[] publisherTableHeader = new String[]{"Name", "Ort"};
+	/**
+	 * the connection to the database
+	 */
 	private CheckURL db;
-
+	/**
+	 * Constructor to initialize the panel.
+	 *
+	 * @param db	connection to the database
+	 */
 	public PublisherPanel(CheckURL db) {
 		this.db = db;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

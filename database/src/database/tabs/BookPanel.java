@@ -7,34 +7,52 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
 
-import com.toedter.calendar.JDateChooser;
 import database.CheckURL;
 import database.Input;
 
 /**
- * Created with IntelliJ IDEA.
- * User: kevingoy
- * Date: 28.12.12
- * Time: 10:05
- * To change this template use File | Settings | File Templates.
+ * The Panel is a tabbedpanel of the main program. It consists of a metabox,
+ * where you can insert a book in the database, and a table with an overview
+ * over the table buch from the database.
+ *
+ * @version RC 1.0
  */
+
 public class BookPanel extends JPanel {
 
+	/**
+	 * the metabox to add a new book
+	 */
 	private JPanel metaBox = new JPanel();
+	/**
+	 * the table with an overview of all books
+	 */
 	private JTable bookTable;
+	/**
+	 * the scrollpane to make the table scrollable
+	 */
 	private JScrollPane scrollPane = new JScrollPane(bookTable);
+	/**
+	 * the array with the the strings for the tableheader
+	 */
 	private String[] bookTableHeader = new String[]{"ISBN", "Preis", "Titel"};
+	/**
+	 * the connection to the database
+	 */
 	private CheckURL db;
 
+	/**
+	 * Constructor to initialize the panel.
+	 *
+	 * @param db	connection to the database
+	 */
 	public BookPanel(CheckURL db) {
 		this.db = db;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

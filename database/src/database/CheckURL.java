@@ -23,9 +23,16 @@ import javax.swing.*;
  *
  */
 public class CheckURL {
+
+	/**
+	 * the connection object to connect with the database
+	 */
 	private Connection dbCon = null;
+	/**
+	 * the sql statement
+	 */
 	private Statement statement;
-  private ResultSet result = null;
+
 
 	public CheckURL() {
 		try {
@@ -38,13 +45,17 @@ public class CheckURL {
 
   }
 
+	/**
+	 * To close the connection to the database.
+	 *
+	 */
 	public void close_database() {
 		try {
 			dbCon.close();
+			System.out.println("Database closed");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("Database closed");
 	}
 
   /**
@@ -56,7 +67,8 @@ public class CheckURL {
    */
    public ResultSet executeSelect(String sql)
   {
-    try {
+		ResultSet result = null;
+		try {
       Statement stm = dbCon.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
       result = stm.executeQuery(sql);
     }
@@ -92,6 +104,13 @@ public class CheckURL {
     return result;
   }
 
+	/**
+	 * A method to write a column of the resultset into a string array.
+	 *
+	 * @param resultSet	the resultset to convert
+	 * @param columnIndex	the column from the resultset
+	 * @return	the column as a string array
+	 */
 	public String[] resultSetToStringArray(ResultSet resultSet, int columnIndex) {
 		LinkedList<String> resultList = new LinkedList<String>();
 
@@ -106,6 +125,15 @@ public class CheckURL {
 		return resultList.toArray(new String[0]);
 	}
 
+	/**
+	 * A method to write two column of the resultset into a string array.
+	 * I.e. to get a name out of two columns.
+	 *
+	 * @param resultSet	the resultset to convert
+	 * @param columnIndex	the column from the resultset
+	 * @param columnIndexTwo	the column from the resultset
+	 * @return	the column as a string array
+	 */
 	public String[] resultSetToStringArrayWithTwo(ResultSet resultSet, int columnIndex, int columnIndexTwo) {
 		LinkedList<String> resultList = new LinkedList<String>();
 
@@ -120,6 +148,9 @@ public class CheckURL {
 		return resultList.toArray(new String[0]);
 	}
 
+	/**
+	 * A method to disable the auto commit function of the database connection.
+	 */
   public void disableAutoCommit() {
     try {
       dbCon.setAutoCommit(false);
@@ -128,6 +159,9 @@ public class CheckURL {
     }
   }
 
+	/**
+	 * A method to enable the auto commit function of the database connection.
+	 */
   public void enableAutoCommit() {
     try {
       dbCon.setAutoCommit(true);
@@ -136,6 +170,9 @@ public class CheckURL {
     }
   }
 
+	/**
+	 * A method to commit the transaction to the database.
+	 */
   public void commitTransaction() {
     try {
       dbCon.commit();
