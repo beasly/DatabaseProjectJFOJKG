@@ -18,18 +18,40 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
+/**
+ * The Panel is a tabbedpanel of the main program. It consists of a metabox,
+ * where you can insert a book in the database, and a table with an overview
+ * over the table buch from the database.
+ *
+ * @version RC 1.0
+ */
+
 public class HomePanel extends JPanel {
-
+	/**
+	 * the table with an overview of the database
+	 */
 	private JTable homeTable;
-
+	/**
+	 * the array with the the strings for the tableheader
+	 */
 	private String[] homeTableHeader = new String[]{"Buch", "Autor", "Verlag", "Genre", "Schlagwort", "Regal", "verliehen an"};
-
+	/**
+	 * the scrollpane to make the table scrollable
+	 */
 	private JScrollPane homePane = new JScrollPane();
-
+	/**
+	 * the connection to the database
+	 */
 	private CheckURL db;
-
+	/**
+	 * the metabox to filter the table
+	 */
 	private JPanel metaBox = new JPanel();
-
+	/**
+	 * Constructor to initialize the panel.
+	 *
+	 * @param db	connection to the database
+	 */
 	public HomePanel(CheckURL db) {
 		this.db = db;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

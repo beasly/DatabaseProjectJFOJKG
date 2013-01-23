@@ -12,20 +12,40 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: kevingoy
- * Date: 14.01.13
- * Time: 15:41
- * To change this template use File | Settings | File Templates.
+ * The Panel is a tabbedpanel of the main program. It consists of a metabox,
+ * where you can insert a genre in the database, and a table with an overview
+ * over the table genre from the database.
+ *
+ * @version RC 1.0
  */
+
 public class GenrePanel extends JPanel {
 
+	/**
+	 * the metabox to add a new genre
+	 */
 	private JPanel metaBox = new JPanel();
+	/**
+	 * the table with an overview of all genre
+	 */
 	private JTable genreTable;
+	/**
+	 * the scrollpane to make the table scrollable
+	 */
 	private JScrollPane scrollPane = new JScrollPane(genreTable);
+	/**
+	 * the array with the the strings for the tableheader
+	 */
 	private String[] genreTableHeader = new String[]{"Genre"};
+	/**
+	 * the connection to the database
+	 */
 	private CheckURL db;
-
+	/**
+	 * Constructor to initialize the panel.
+	 *
+	 * @param db	connection to the database
+	 */
 	public GenrePanel(CheckURL db) {
 		this.db = db;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

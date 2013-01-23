@@ -13,14 +13,41 @@ import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The Panel is a tabbedpanel of the main program. It consists of a metabox,
+ * where you can insert a author in the database, and a table with an overview
+ * over the table autoren from the database.
+ *
+ * @version RC 1.0
+ */
+
 public class AuthorPanel extends JPanel {
 
+	/**
+	 * the metabox to add a new author
+	 */
 	private JPanel metaBox = new JPanel();
+	/**
+	 * the table with an overview of all authors
+	 */
 	private JTable authorTable;
+	/**
+	 * the scrollpane to make the table scrollable
+	 */
 	private JScrollPane scrollPane = new JScrollPane(authorTable);
+	/**
+	 * the array with the the strings for the tableheader
+	 */
 	private String[] authorTableHeader = new String[]{"Name", "Vorname"};
+	/**
+	 * the connection to the database
+	 */
 	private CheckURL db;
-
+	/**
+	 * Constructor to initialize the panel.
+	 *
+	 * @param db	connection to the database
+	 */
 	public AuthorPanel(CheckURL db) {
 		this.db = db;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

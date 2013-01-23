@@ -12,21 +12,40 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: kevingoy
- * Date: 14.01.13
- * Time: 16:07
- * To change this template use File | Settings | File Templates.
+ * The Panel is a tabbedpanel of the main program. It consists of a metabox,
+ * where you can insert a lender in the database, and a table with an overview
+ * over the table ausleiher from the database.
+ *
+ * @version RC 1.0
  */
+
 public class LenderPanel extends JPanel{
 
-
+	/**
+	 * the metabox to add a new lender
+	 */
 	private JPanel metaBox = new JPanel();
+	/**
+	 * the table with an overview of all lenders
+	 */
 	private JTable lenderTable;
+	/**
+	 * the scrollpane to make the table scrollable
+	 */
 	private JScrollPane scrollPane = new JScrollPane(lenderTable);
+	/**
+	 * the array with the the strings for the tableheader
+	 */
 	private String[] lenderTableHeader = new String[]{"Name", "Vorname", "Email"};
+	/**
+	 * the connection to the database
+	 */
 	private CheckURL db;
-
+	/**
+	 * Constructor to initialize the panel.
+	 *
+	 * @param db	connection to the database
+	 */
 	public LenderPanel(CheckURL db) {
 		this.db = db;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
