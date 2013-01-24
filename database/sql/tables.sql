@@ -35,7 +35,6 @@ Genre varchar(30) not null);
 CREATE TABLE veroeffentlichtVon(
 Buch varchar(14) references Buch(ISBN) on delete cascade,
 Verlag integer references Verlag(VerlagsID) on delete cascade,
-Datum Date,
 primary key(Buch, Verlag));
 
 CREATE TABLE ausgeliehenAn(
