@@ -5,7 +5,6 @@ INSERT INTO Buch VALUES ('978-3827418241', 15.95, 'Theoretische Informatik - kur
 INSERT INTO Buch VALUES ('978-3423214124', 7.95, 'Der kleine Hobbit');
 INSERT INTO Buch VALUES ('978-3050030463', 19.99, 'Negative Dialektik');
 INSERT INTO Buch VALUES ('978-3746626734', 16.99, 'Krieg und Frieden');
-INSERT INTO Buch VALUES ('978-3746626734', 16.99, 'Krieg und Frieden');
 INSERT INTO Buch VALUES ('978-3438012609', 9.99, 'Die Bibel');
 INSERT INTO Buch VALUES ('978-3880599925', 20.99, 'Das Kapital');
 
@@ -132,7 +131,7 @@ INSERT INTO hatSchlagwort VALUES ('978-3880599925', 8);
 
 
 
-INSERT INTO Ausleiher VALUES (DEFAULT, 'Lucky', 'Luke', 'lucky@luke.com);
+INSERT INTO Ausleiher VALUES (DEFAULT, 'Lucky', 'Luke', 'lucky@luke.com');
 INSERT INTO Ausleiher VALUES (DEFAULT, 'Peter', 'Parker', 'spiderman@net.com');
 INSERT INTO Ausleiher VALUES (DEFAULT, 'Nicht', 'verliehen', ' ');
 INSERT INTO Ausleiher VALUES (DEFAULT, 'Bruce', 'Wayne', 'batman@cave.com');
